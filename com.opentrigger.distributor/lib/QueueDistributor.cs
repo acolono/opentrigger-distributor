@@ -8,7 +8,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace com.opentrigger.distributord
 {
-    class QueueDistributor
+    public class QueueDistributor
     {
         private readonly MqttClient _client;
         public QueueDistributor(

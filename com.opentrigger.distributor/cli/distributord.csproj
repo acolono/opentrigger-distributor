@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4BE4035E-572A-48F3-B1C4-C28033D56F29}</ProjectGuid>
+    <ProjectGuid>{A09F8AD4-96D0-4DDD-8337-28884F82F540}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>com.opentrigger.distributord</RootNamespace>
+    <RootNamespace>com.opentrigger.cli.distributord</RootNamespace>
     <AssemblyName>distributord</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -24,7 +24,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -36,14 +36,6 @@
     <StartupObject>com.opentrigger.distributord.DistributorEntry</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="M2Mqtt.Mono">
-      <HintPath>..\org.eclipse.paho.mqtt.m2mqtt\M2Mqtt.Mono.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,15 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryStringExtensions.cs" />
-    <Compile Include="PacketData.cs" />
     <Compile Include="DistributorEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueueDistributor.cs" />
-    <Compile Include="RoundtripTime.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\lib\libdistributor.csproj">
+      <Project>{4be4035e-572a-48f3-b1c4-c28033d56f29}</Project>
+      <Name>libdistributor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

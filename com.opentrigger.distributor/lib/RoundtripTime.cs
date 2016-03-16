@@ -13,7 +13,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace com.opentrigger.distributord
 {
-    class RoundtripTime
+    public class RoundtripTime
     {
         private int Verbosity { get; }
 
