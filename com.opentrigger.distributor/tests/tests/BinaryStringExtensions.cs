@@ -14,9 +14,7 @@ namespace com.opentrigger.tests
         [Test]
         public void TryNunit()
         {
-            Debug.WriteLine(new byte[] { 0xAA }.ToHexString());
-            Assert.IsTrue("FF".ToBytes() == new byte[] {0xFF});
-            Assert.IsTrue(new byte[] {0xAA}.ToHexString() == "AA");
+            Assert.IsTrue("FFAA".ToBytes().ToHexString() == "FFAA");
         }
     }
 }
