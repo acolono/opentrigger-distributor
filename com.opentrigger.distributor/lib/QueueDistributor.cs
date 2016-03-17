@@ -1,59 +1,64 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using uPLibrary.Networking.M2Mqtt;
-using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace com.opentrigger.distributord
 {
+    public delegate bool ByteFilter(byte[] packetBytes);
+
     public class QueueDistributor
     {
         private readonly MqttClient _client;
-        public QueueDistributor(
-            string connection = "tcp://127.0.0.1:1883",
-            string rawTopic = "/opentrigger/raw/#", 
-            string triggerTopic = "/opentrigger/signals/trigger", 
-            string releaseTopic = "/opentrigger/signals/release", 
-            int idleCycle = 500,
-            string clientId = null,
-            int verbosity = 0,
-            int distance = 2000,
-            int skip = 0,
-            string[] excudeMacs = null
-        )
+        private readonly QueueDistributorConfig _config;
+        public ByteFilter ByteFilter = p => p[0] == 0x04 && p[1] == 0x3e; /* HCI Event && LE Meta */
+        private readonly PacketFilter _packetFilter;
+        private readonly int _verbosity = 0;
+        public QueueDistributor(QueueDistributorConfig config, int verbosity = 0)
         {
-            var url = new Uri(connection);
+            _verbosity = verbosity;
+            _config = config;
+            var url = new Uri(_config.Connection);
             if(url.Scheme != "tcp") throw new InvalidProgramException($"Schema: {url.Scheme} is not supported");
-            var port = url.Port >= 0 ? url.Port : 1883;
+            var port = url.Port > 0 ? url.Port : 1883;
             _client = new MqttClient(url.Host, port, false, null, null, MqttSslProtocols.None);
-            if (string.IsNullOrWhiteSpace(clientId)) clientId = Guid.NewGuid().ToString();
-            _client.Connect(clientId); //TODO: parse authentication parameters
-            _client.Subscribe(new[] {rawTopic}, new[] {MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE});
+            if (string.IsNullOrWhiteSpace(_config.ClientId)) config.ClientId = Guid.NewGuid().ToString();
+            _client.Connect(_config.ClientId); //TODO: parse authentication parameters
+            _client.Subscribe(_config.RawHexTopics.ToArray(), _config.QosLevels.Select(qosLevel => (byte)qosLevel).ToArray());
 
-            var pf = new PacketFilter(skip, distance, verbosity);
+            _packetFilter = new PacketFilter(_config.Skip, _config.Distance, _verbosity);
             
-            pf.OnTrigger = data =>
+            _packetFilter.OnTrigger = data =>
             {
-                if(verbosity>0) Console.WriteLine($"TRIGGER: {data.UniqueIdentifier}");
-                Publish(triggerTopic, data);
-                if (verbosity >= 2) DebugPublish(triggerTopic, data);
+                if (_verbosity > 0) Console.WriteLine($"TRIGGER: {data.UniqueIdentifier}");
+                Publish(_config.TriggerTopic, data);
             };
 
-            pf.OnRelease = data =>
+            _packetFilter.OnRelease = data =>
             {
-                if (verbosity > 0) Console.WriteLine($"RELEASE: {data.UniqueIdentifier} Age:{DateTimeOffset.UtcNow - data.Timestamp}");
-                Publish(releaseTopic, data);
-                if (verbosity >= 2) DebugPublish(releaseTopic, data);
+                if (_verbosity > 0) Console.WriteLine($"RELEASE: {data.UniqueIdentifier} Age:{DateTimeOffset.UtcNow - data.Timestamp}");
+                Publish(_config.ReleaseTopic, data);
             };
 
             _client.MqttMsgPublishReceived += (sender, args) =>
             {
-                byte[] bytes;
+                BtleDecoded btData = null;
                 try
                 {
-                    bytes = Encoding.UTF8.GetString(args.Message).ToBytes();
+                    var message = Encoding.UTF8.GetString(args.Message);
+                    if (message[0] != '{')
+                    {
+                        // hex stream
+                        btData = BtleDecoder.Decode(message);
+                    }
+                    else
+                    {
+                        //json
+                        var jsonMessage = message.Deserialize<PacketData>();
+                        btData = jsonMessage.Packet;
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -61,44 +66,94 @@ namespace com.opentrigger.distributord
                     Console.WriteLine(exception);
                     return;
                 }
-                /*         HCI Event && LE Meta         */
-                if (bytes[0] == 0x04 && bytes[1] == 0x03e)
+                
+                if (ByteFilter(btData.RawData))
                 {
-                    var mac = bytes.Skip(7).Take(6).Reverse().ToArray().ToHexString(":");
-                    if (excudeMacs != null && excudeMacs.Contains(mac))
+                    if (_config.ExcludedMacs != null && _config.ExcludedMacs.Contains(btData.Mac))
                     {
-                        if(verbosity>=5)Console.WriteLine($"EXCLUDED: {mac}");
+                        if(_verbosity>=5)Console.WriteLine($"EXCLUDED: {btData.Mac}");
                     }
                     else
                     {
-                        var data = new PacketData
+                        if (_config.IncludedMacs == null || _config.IncludedMacs.Contains(btData.Mac))
                         {
-                            Packet = bytes,
-                            UniqueIdentifier = mac, /* TODO: use the right thing! */
-                            OriginTopic = args.Topic
-                        };
-                        pf.Add(data);
+                            var data = new PacketData
+                            {
+                                Packet = btData,
+                                OriginTopic = args.Topic
+                            };
+                            switch (_config.UniqueIdentifier)
+                            {
+                                case UniqueIdentifier.Mac:
+                                    data.UniqueIdentifier = btData.Mac;
+                                    break;
+
+                                case UniqueIdentifier.MacAndAdvertisingData:
+                                    if (btData?.AdvertisingData != null && btData.AdvertisingData.Length > 0)
+                                    {
+                                        data.UniqueIdentifier = btData.Mac + "-" + btData.AdvertisingData.ToHexString();
+                                    }
+                                    break;
+                                case UniqueIdentifier.MacAndTokenCubePir:
+                                    if (btData?.ManufacturerSpecific?.SensorData != null)
+                                    {
+                                        var sensorData = btData.ManufacturerSpecific.SensorData;
+                                        if (sensorData.ContainsKey("PIR"))
+                                        {
+                                            var pirString = sensorData["PIR"];
+                                            bool pir;
+                                            if (!string.IsNullOrWhiteSpace(pirString) && bool.TryParse(pirString, out pir) && pir)
+                                            {
+                                                data.UniqueIdentifier = btData.Mac + "-pir:true";
+                                            }
+                                        }
+                                    }
+                                    break;
+                            }
+                            if(data.UniqueIdentifier != null) _packetFilter.Add(data);
+                        }
                     }
                     
                 }
 
             };
+        }
 
-            while (_client.IsConnected)
+        public void Distribute()
+        {
+            _packetFilter.WorkCycle();
+            if (!_client.IsConnected)
             {
-                System.Threading.Thread.Sleep(idleCycle);
-                pf.Cleanup();
+                throw new WebException("Client not connected");
             }
         }
 
-        private ushort Publish(string topic, object data) => _client.Publish(topic, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data)));
 
-        private void DebugPublish(string topic, object data)
+        private void Publish(string topic, object data)
         {
+            if (string.IsNullOrWhiteSpace(topic)) return;
+            string formatedData = null;
+            switch (_config.PublishFormat)
+            {
+                case PublishFormat.Json:
+                    formatedData = data.Serialize(false);
+                    break;
+                case PublishFormat.JsonPretty:
+                    formatedData = data.Serialize();
+                    break;
+                case PublishFormat.HexString:
+                    formatedData = (data as PacketData)?.Packet.RawData.ToHexString();
+                    break;
+            }
+            if (string.IsNullOrWhiteSpace(formatedData))
+            {
+                if(_verbosity >= 3) Console.WriteLine($"Failed to publish as {_config.PublishFormat}");
+                return;
+            }
+            _client.Publish(topic, Encoding.UTF8.GetBytes(formatedData));
+            if (_verbosity < 2) return;
             Console.WriteLine("Publishing To: " + topic);
-            Console.WriteLine(JsonConvert.SerializeObject(data,Formatting.Indented));
+            Console.WriteLine(data.Serialize());
         }
     }
-
-
 }

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libdistributor", "com.opent
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "distributord", "com.opentrigger.distributor\cli\distributord.csproj", "{A09F8AD4-96D0-4DDD-8337-28884F82F540}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "com.opentrigger.distributor\tests\tests\tests.csproj", "{C671D403-5F97-493C-9BEC-C2C5CA568DB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "com.opentrigger.distributor\tests\tests.csproj", "{C671D403-5F97-493C-9BEC-C2C5CA568DB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
