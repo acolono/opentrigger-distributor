@@ -59,7 +59,7 @@ namespace com.opentrigger.distributord
                         ReleaseTopic = null,
                         TriggerTopic = "/opentrigger/signals/sensors",
                         Distance = 0,
-                        //IncludedMacs = includeMacs_TokenCube,
+                        IncludedMacs = includeMacs_TokenCube,
                         ExcludedMacs = excludeMacs,
                     },
                 },
