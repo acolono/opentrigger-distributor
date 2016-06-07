@@ -104,5 +104,14 @@ namespace com.opentrigger.distributord
                 _downList.RemoveAll(d => !uniqueUids.Contains(d,_uidComparer));
             }
         }
+
+        public int RemoveByUniqueIdentifier(string uniqueIdentifier) => RemoveByUniqueIdentifiers(new [] {uniqueIdentifier});
+        public int RemoveByUniqueIdentifiers(IEnumerable<string> uniqueIdentifiers)
+        {
+            lock (_lock)
+            {
+                return _allData.RemoveAll(d => uniqueIdentifiers.Contains(d.UniqueIdentifier));
+            }
+        }
     }
 }

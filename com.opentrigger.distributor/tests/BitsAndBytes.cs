@@ -112,6 +112,14 @@ namespace com.opentrigger.tests
         }
 
         [Test]
+        public void nRF51_PIR()
+        {
+            var ddDecoded = BtleDecoder.Decode("043E2502010000E7AAAAAAAAAA19020106030300A00809427574746F6E0008FFEEFF0401110700C0");
+            Trace.WriteLine(ddDecoded.Serialize());
+            Assert.AreEqual("False", ddDecoded.ManufacturerSpecific.SensorData["PIR"]);
+        }
+
+        [Test]
         public void BinaryReader()
         {
             using (var ms = new MemoryStream("64010003".ToBytes()))

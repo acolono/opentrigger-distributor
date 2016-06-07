@@ -104,13 +104,13 @@ namespace com.opentrigger.distributord
                                             bool pir;
                                             if (!string.IsNullOrWhiteSpace(pirString) && bool.TryParse(pirString, out pir) && pir)
                                             {
-                                                data.UniqueIdentifier = btData.Mac + "-pir:true";
+                                                data.UniqueIdentifier = btData.Mac;
                                             }
                                         }
                                     }
                                     break;
                             }
-                            if(data.UniqueIdentifier != null) _packetFilter.Add(data);
+                            if(data?.UniqueIdentifier != null) _packetFilter.Add(data);
                         }
                     }
                     

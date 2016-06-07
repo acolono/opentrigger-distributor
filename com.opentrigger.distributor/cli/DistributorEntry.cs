@@ -30,8 +30,8 @@ namespace com.opentrigger.distributord
 
             DistributorConfig config;
 
-            var connection = string.Intern("tcp://pi3.fritz.box");
-            var includeMacs_TokenCube = new[] { "F1:11:11:11:10:12" };
+            var connection = string.Intern("tcp://pi3");
+            var includeMacs_TokenCube = new[] { "F1:11:11:11:10:12", "CA:9F:0A:00:66:20" };
             var includeMacs_WhiteButtons = new[] { "0C:F3:EE:00:2D:00", "0C:F3:EE:00:2E:7D" };
 
             var excludeMacs = new[] {"54:60:09:39:F0:55"}; // annoying things...
@@ -43,14 +43,14 @@ namespace com.opentrigger.distributord
                         Connection = connection,
                         Skip = skip,
                         IncludedMacs = includeMacs_WhiteButtons,
-                        //ExcludedMacs = excludeMacs,
+                        ExcludedMacs = excludeMacs,
                     },
                     new QueueDistributorConfig {
                         Connection = connection,
                         Skip = skip,
                         ExcludedMacs = excludeMacs,
                         UniqueIdentifier = UniqueIdentifier.MacAndTokenCubePir,
-                        Distance = 200,
+                        Distance = 100,
                     },
                     new QueueDistributorConfig {
                         Connection = connection,
