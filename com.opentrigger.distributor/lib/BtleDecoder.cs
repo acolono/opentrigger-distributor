@@ -140,6 +140,17 @@ namespace com.opentrigger.distributord
                             result.ManufacturerSpecific.AddSensortData("BatteryCharge",batteryCharge.ToString());
                             continue;
                         }
+                        if (sensorType == 0x0F) // 0x0F 6x unint8
+                        {
+                            var digitalInputs = new int[6];
+
+                            for (var i = 0; i < digitalInputs.Length; i++)
+                            {
+                                digitalInputs[i] = br.ReadInt8();
+                                result.ManufacturerSpecific.AddSensortData($"DigitalInput{i}", digitalInputs[i].ToString());
+                            }
+                            result.ManufacturerSpecific.AddSensortData("DigitalInputs", string.Join(",", digitalInputs.Select(v => v.ToString())));
+                        }
                         var bytesLeft = br.BaseStream.Length - br.BaseStream.Position;
                         var unknownData = new byte[bytesLeft];
                         br.Read(unknownData, 0, unknownData.Length);

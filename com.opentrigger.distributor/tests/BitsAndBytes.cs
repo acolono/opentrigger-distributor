@@ -117,6 +117,13 @@ namespace com.opentrigger.tests
             var ddDecoded = BtleDecoder.Decode("043E2502010000E7AAAAAAAAAA19020106030300A00809427574746F6E0008FFEEFF0401110700C0");
             Trace.WriteLine(ddDecoded.Serialize());
             Assert.AreEqual("False", ddDecoded.ManufacturerSpecific.SensorData["PIR"]);
+
+            var gpio = BtleDecoder.Decode("043e28020100012066000a9fca1c020106030300a004094f54000fffeeff04011107000f000000000000b4");
+            Trace.WriteLine(gpio.Serialize());
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["DigitalInputs"], "0,0,0,0,0,0");
+
+            var gpioEnabled = BtleDecoder.Decode("043e28020100012066000a9fca1c020106030300a004094f54000fffeeff04011107010f010000000000bf");
+            Trace.WriteLine(gpioEnabled.Serialize());
         }
 
         [Test]
