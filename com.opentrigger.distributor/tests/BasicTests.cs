@@ -60,7 +60,7 @@ namespace com.opentrigger.tests
                 },
                 Verbosity = 4
             };
-            System.IO.File.WriteAllText("debugConfig.json", config.Serialize());
+            System.IO.File.WriteAllText("debugConfig.json", config.Serialize(), Encoding.UTF8);
         }
 
         [Test]

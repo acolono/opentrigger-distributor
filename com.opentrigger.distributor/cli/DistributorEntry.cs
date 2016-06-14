@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -66,7 +67,28 @@ namespace com.opentrigger.distributord
                 Verbosity = verbosity,
                 RunParallel = true,
             };
-            
+
+            var configIndex = Array.IndexOf(args, "-c");
+            if (configIndex == -1) configIndex = Array.IndexOf(args, "--config");
+            if (configIndex != -1)
+            {
+                try
+                {
+                    var configFile = args.ElementAtOrDefault(configIndex + 1);
+                    if(string.IsNullOrWhiteSpace(configFile)) throw new Exception("Invalid config file name");
+                    var configContent = System.IO.File.ReadAllText(configFile, Encoding.UTF8);
+                    config = configContent.Deserialize<DistributorConfig>();
+                }
+                catch (Exception)
+                {
+                    Console.Error.WriteLine("Error loading configuration!");
+                    throw;
+                }
+                
+            }
+
+            if(verbosity > 0) Console.WriteLine(config.Serialize());
+
             var distributors = config.QueueDistributorConfigs.Select(queueDistributorConfig => new QueueDistributor(queueDistributorConfig,config.Verbosity)).ToList();
             if (config.RunParallel) while (true)
             {

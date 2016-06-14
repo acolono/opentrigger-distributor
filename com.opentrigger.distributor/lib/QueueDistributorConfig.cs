@@ -30,7 +30,7 @@ namespace com.opentrigger.distributord
     {
         Json,
         JsonPretty,
-        HexString,
+        HexString, /* convert for wireshark like: echo $LINE| xxd -r -p | od -Ax -tx1 -v */
         //TODO: Bson,Binary,?
     }
 
@@ -40,7 +40,6 @@ namespace com.opentrigger.distributord
         Mac,
         MacAndAdvertisingData,
         MacAndTokenCubePir,
-
     }
 
     [JsonConverter(typeof(StringEnumConverter))]
