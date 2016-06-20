@@ -1,20 +1,21 @@
 {
   "QueueDistributorConfigs": [
+    
+    // one or mor DistributorConfig/s
     {
       "Connection": "tcp://127.0.0.1:1883", /* tcp://host:port of mqtt server */
       "QosLevels": [ "AtMostOnce" ], /* AtMostOnce | AtLeastOnce | ExactlyOnce */
-      "RawHexTopics": [ "/opentrigger/rawhex/#" ],
-      "TriggerTopic": "/opentrigger/signals/trigger",
-      "ReleaseTopic": "/opentrigger/signals/release",
+      "RawHexTopics": [ "/opentrigger/rawhex/#" ], /* topics to subscribe to, expecting bluetooth packages in HexStream Format */
+      "TriggerTopic": "/opentrigger/signals/trigger", /* trigger messages will be published to this topic */
+      "ReleaseTopic": "/opentrigger/signals/release", /* release messages will be published to this topic */
       "PublishFormat": "Json", /* Json | JsonPretty | HexString */
-      "ClientId": null,
-      "Distance": 100,
+      "ClientId": null, /* null will generate a random ClinetÍd */
+      "Distance": 100, /* possible delay between signals */
       "Skip": 0,
       "UniqueIdentifier": "MacAndTokenCubePir", /* Mac | MacAndAdvertisingData | MacAndTokenCubePir */
-      "IncludedMacs": [
-        "CA:9F:0A:00:66:20" /* Mac Address of your Button */
-      ]
-    }
+      "IncludedMacs": [ "CA:9F:0A:00:66:20" ], /* Mac Address of your Button/s */
+    },
+
   ],
   "Verbosity": 0, /* 0-5 */
   "IdleCycle": 500,

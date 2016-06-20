@@ -151,11 +151,14 @@ namespace com.opentrigger.distributord
                                 result.ManufacturerSpecific.AddSensortData($"DigitalInput{i}", digitalInputs[i].ToString());
                             }
                             result.ManufacturerSpecific.AddSensortData("DigitalInputs", string.Join(",", digitalInputs.Select(v => v.ToString())));
+                            continue;
                         }
+
                         var bytesLeft = br.BaseStream.Length - br.BaseStream.Position;
+                        if (bytesLeft <= 0) continue;
                         var unknownData = new byte[bytesLeft];
                         br.Read(unknownData, 0, unknownData.Length);
-                        result.ManufacturerSpecific.AddSensortData("UnknownData",unknownData.ToHexString());
+                        result.ManufacturerSpecific.AddSensortData("UnknownData", unknownData.ToHexString());
                     }
                 }
             }

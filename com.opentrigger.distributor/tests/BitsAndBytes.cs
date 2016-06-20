@@ -132,12 +132,18 @@ namespace com.opentrigger.tests
             Trace.WriteLine(ddDecoded.Serialize());
             Assert.AreEqual("False", ddDecoded.ManufacturerSpecific.SensorData["PIR"]);
 
-            var gpio = BtleDecoder.Decode("043e28020100012066000a9fca1c020106030300a004094f54000fffeeff04011107000f000000000000b4");
+            var gpio = BtleDecoder.Decode("043E20020100012066000A9FCA1402010610FFEEFF04011107000F18010101010101E0");
             Trace.WriteLine(gpio.Serialize());
-            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["DigitalInputs"], "0,0,0,0,0,0");
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["DigitalInputs"], "1,1,1,1,1,1");
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["PIR"], "False");
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["EventId"], "24");
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["DigitalInput0"], "1");
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["DigitalInput1"], "1");
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["DigitalInput2"], "1");
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["DigitalInput3"], "1");
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["DigitalInput4"], "1");
+            Assert.AreEqual(gpio.ManufacturerSpecific.SensorData["DigitalInput5"], "1");
 
-            var gpioEnabled = BtleDecoder.Decode("043e28020100012066000a9fca1c020106030300a004094f54000fffeeff04011107010f010000000000bf");
-            Trace.WriteLine(gpioEnabled.Serialize());
         }
 
         [Test]
