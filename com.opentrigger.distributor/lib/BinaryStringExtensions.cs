@@ -80,7 +80,8 @@ namespace com.opentrigger.distributord
             return BitConverter.ToInt32(bytes.ConvertEndianness(Endian.BigEndian),0);
         }
 
-        public static int ReadInt8(this BinaryReader br) => (int) br.ReadByte();
+        public static int ReadInt8(this BinaryReader br) => br.ReadByte();
+        public static uint ReadUint8(this BinaryReader br) => br.ReadByte();
 
         public static bool ReadTokenCubeBool(this BinaryReader br)
         {

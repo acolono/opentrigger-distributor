@@ -49,7 +49,7 @@ namespace com.opentrigger.distributord
                     new QueueDistributorConfig {
                         Connection = connection,
                         Skip = skip,
-                        ExcludedMacs = excludeMacs,
+                        IncludedMacs = includeMacs_TokenCube,
                         UniqueIdentifier = UniqueIdentifier.MacAndTokenCubePir,
                         Distance = 100,
                     },

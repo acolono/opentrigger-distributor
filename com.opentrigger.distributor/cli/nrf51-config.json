@@ -1,0 +1,21 @@
+{
+  "QueueDistributorConfigs": [
+    {
+      "Connection": "tcp://127.0.0.1:1883", /* tcp://host:port of mqtt server */
+      "QosLevels": [ "AtMostOnce" ], /* AtMostOnce | AtLeastOnce | ExactlyOnce */
+      "RawHexTopics": [ "/opentrigger/rawhex/#" ],
+      "TriggerTopic": "/opentrigger/signals/trigger",
+      "ReleaseTopic": "/opentrigger/signals/release",
+      "PublishFormat": "Json", /* Json | JsonPretty | HexString */
+      "ClientId": null,
+      "Distance": 100,
+      "Skip": 0,
+      "UniqueIdentifier": "MacAndTokenCubePir", /* Mac | MacAndAdvertisingData | MacAndTokenCubePir */
+      "IncludedMacs": [
+        "CA:9F:0A:00:66:20" /* Mac Address of your Button */
+      ]
+    }
+  ],
+  "Verbosity": 0, /* 0-5 */
+  "IdleCycle": 500,
+}

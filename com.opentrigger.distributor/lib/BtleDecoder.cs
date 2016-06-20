@@ -142,6 +142,7 @@ namespace com.opentrigger.distributord
                         }
                         if (sensorType == 0x0F) // 0x0F 6x unint8
                         {
+                            result.ManufacturerSpecific.AddSensortData("EventId", br.ReadUint8().ToString());
                             var digitalInputs = new int[6];
 
                             for (var i = 0; i < digitalInputs.Length; i++)

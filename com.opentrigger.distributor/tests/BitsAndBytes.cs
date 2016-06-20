@@ -32,6 +32,20 @@ namespace com.opentrigger.tests
     public class BitsAndBytes
     {
         [Test]
+        public void Uint8()
+        {
+            var bytes = new byte[] {0x01,0xFF,0xFF};
+            using (var ms = new MemoryStream(bytes))
+            using (var br = new BinaryReader(ms))
+            {
+                Assert.IsTrue(br.ReadUint8().ToString() == "1");
+                Assert.IsTrue(br.ReadUint8().ToString() == "255");
+                bytes[2]++;
+                Assert.IsTrue(br.ReadUint8().ToString() == "0");
+            }
+        }
+
+        [Test]
         public void Endian()
         {
             Trace.WriteLine($"isLittleEndian: {BitConverter.IsLittleEndian}");
