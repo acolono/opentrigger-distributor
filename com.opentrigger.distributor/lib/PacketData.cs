@@ -10,7 +10,6 @@ namespace com.opentrigger.distributord
         public BtleDecoded Packet { get; set; }
         public string UniqueIdentifier { get; set; }
         public string OriginTopic { get; set; }
-        public sbyte Rssi { get; set; }
     }
 
     public class ReleaseData : PacketData
