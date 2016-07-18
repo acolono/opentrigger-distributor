@@ -109,6 +109,23 @@ namespace com.opentrigger.distributord
                                         }
                                     }
                                     break;
+                                case UniqueIdentifier.Nrf51MacAndTokenCubePir:
+                                    if (btData?.ManufacturerSpecific?.SensorData != null)
+                                    {
+                                        var sensorData = btData.ManufacturerSpecific.SensorData;
+                                        if (sensorData.ContainsKey("PIR") && sensorData.ContainsKey("EventId"))
+                                        {
+                                            var pirString = sensorData["PIR"];
+                                            var eventIdString = sensorData["EventId"];
+                                            int eventId;
+                                            bool pir;
+                                            if (!string.IsNullOrWhiteSpace(pirString) && bool.TryParse(pirString, out pir) && pir && !string.IsNullOrWhiteSpace(eventIdString) && int.TryParse(eventIdString, out eventId))
+                                            {
+                                                data.UniqueIdentifier = $"{btData.Mac}-{eventId:X2}";
+                                            }
+                                        }
+                                    }
+                                    break;
                             }
                             if(data?.UniqueIdentifier != null) _packetFilter.Add(data);
                         }

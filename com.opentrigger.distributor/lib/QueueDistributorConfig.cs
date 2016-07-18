@@ -40,6 +40,7 @@ namespace com.opentrigger.distributord
         Mac,
         MacAndAdvertisingData,
         MacAndTokenCubePir,
+        Nrf51MacAndTokenCubePir,
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

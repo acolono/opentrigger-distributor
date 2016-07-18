@@ -12,8 +12,8 @@
       "ClientId": null, /* null will generate a random ClinetÍd */
       "Distance": 100, /* possible delay between signals */
       "Skip": 0,
-      "UniqueIdentifier": "MacAndTokenCubePir", /* Mac | MacAndAdvertisingData | MacAndTokenCubePir */
-      "IncludedMacs": [ "CA:9F:0A:00:66:20" ], /* Mac Address of your Button/s */
+      "UniqueIdentifier": "Nrf51MacAndTokenCubePir", /* Mac | MacAndAdvertisingData | MacAndTokenCubePir | Nrf51MacAndTokenCubePir */
+      "IncludedMacs": [ "CA:9F:0A:00:66:20" ] /* Mac Address of your Button/s */
     },
 
   ],
