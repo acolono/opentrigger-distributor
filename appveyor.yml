@@ -1,0 +1,9 @@
+version: 0.0.{build}
+configuration: Release
+platform: Any CPU
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: minimal
+artifacts:
+- path: com.opentrigger.distributor/cli/bin/Release/*
