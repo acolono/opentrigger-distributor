@@ -12,6 +12,7 @@ addons:
     - nuget
     - nunit-console
     - make
+    - checkinstall
 mono:
  - alpha
  - beta
@@ -25,3 +26,4 @@ install:
   - make packages
 script:
   - make test
+  - make deb
