@@ -31,5 +31,5 @@ test: build
 deb:
 	checkinstall -D --default --install=$(INSTALL_DEB) --fstrans=yes --pkgversion `git describe --tags | sed -e 's/^v//'` \
 	--pkgname opentrigger-distributor -A all --pkglicense MIT --maintainer 'info@acolono.com' --pkgsource 'https://github.com/acolono/opentrigger-distributor' \
-	--pkgrelease $(CONFIGURATION) --requires 'mono-runtime (>= 4), supervisor' make install
+	--pkgrelease $(CONFIGURATION) --requires 'mono-runtime (>= 4), supervisor, opentrigger-otraw2q' make install
 	
