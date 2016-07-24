@@ -1,8 +1,9 @@
-CONFIGURATION = Release
+CONFIGURATION ?= Release
 ILREPACK = mono $(shell readlink -f `find packages/ -name 'ILRepack.exe'`)
-TARGET = Build
+TARGET ?= Build
+INSTALL_ROOT = /
 
-.PHONY: build install bundle
+.PHONY: build install bundle test
 
 build: packages
 	xbuild /tv:4.0 /p:Configuration=$(CONFIGURATION) /t:$(TARGET)
@@ -13,11 +14,14 @@ bundle: build
 	$(ILREPACK) /out:distributord distributord.exe /ndebug libdistributor.o
 	
 install:
-	install -v com.opentrigger.distributor/cli/bin/$(CONFIGURATION)/distributord /usr/local/bin/
-	mkdir -p /etc/opentrigger/
-	touch /etc/opentrigger/distributord.json
-	install -v supervisor/hci.sh /usr/local/bin/othciinit
-	install -v supervisor/distributor.conf /etc/supervisor/conf.d/distributord.conf
+	install -v com.opentrigger.distributor/cli/bin/$(CONFIGURATION)/distributord $(INSTALL_ROOT)usr/local/bin/
+	mkdir -p $(INSTALL_ROOT)etc/opentrigger/
+	touch $(INSTALL_ROOT)etc/opentrigger/distributord.json
+	install -v supervisor/hci.sh $(INSTALL_ROOT)usr/local/bin/othciinit
+	install -v -m 664 supervisor/distributor.conf $(INSTALL_ROOT)etc/supervisor/conf.d/distributord.conf
 
 packages:
 	nuget restore
+
+test: build
+	nunit-console com.opentrigger.distributor/tests/bin/$(CONFIGURATION)/*.dll

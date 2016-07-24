@@ -1,10 +1,17 @@
 language: csharp
 sudo: false
+env:
+  global:
+  - TARGET=Rebuild
+  matrix:
+  - CONFIGURATION=Debug
+  - CONFIGURATION=Release
 addons:
   apt:
     packages:
     - nuget
     - nunit-console
+    - make
 mono:
  - alpha
  - beta
@@ -15,9 +22,6 @@ matrix:
   - mono: weekly
   - mono: alpha
 install:
-  - nuget restore
+  - make packages
 script:
-  - xbuild /tv:4.0 /p:Configuration=Debug /t:Rebuild
-  - nunit-console com.opentrigger.distributor/tests/bin/Debug/*.dll
-  - xbuild /tv:4.0 /p:Configuration=Release /t:Rebuild
-  - nunit-console com.opentrigger.distributor/tests/bin/Release/*.dll
+  - make test
