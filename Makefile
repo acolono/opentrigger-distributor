@@ -29,7 +29,7 @@ test: build
 	nunit-console com.opentrigger.distributor/tests/bin/$(CONFIGURATION)/*.dll
 
 deb:
-	EDITOR=cat checkinstall -D --default --install=$(INSTALL_DEB) --fstrans=yes --pkgversion `git describe --tags | sed -e 's/^v//'` \
+	checkinstall -D --default --install=$(INSTALL_DEB) --fstrans=yes --pkgversion `git describe --tags | sed -e 's/^v//'` \
 	--pkgname opentrigger-distributor -A all --pkglicense MIT --maintainer 'info@acolono.com' --pkgsource 'https://github.com/acolono/opentrigger-distributor' \
 	--pkgrelease $(CONFIGURATION) --requires 'mono-runtime (>= 4), supervisor' make install
 	
