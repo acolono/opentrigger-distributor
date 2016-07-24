@@ -17,6 +17,9 @@ mono:
  - beta
  - weekly
  - latest
+ - 4.4.0
+ - 4.2.3
+ - 4.0.5
 matrix:
  allow_failures:
   - mono: weekly
