@@ -21,14 +21,13 @@ mono:
  - 4.2.3
  # 4.2.1 is available on debian stretch and ubuntu xenial
  - 4.2.1
- # 3.2.8 is available on debian jessie and ubuntu trusty
- - 3.2.8
+ # 3.2.8 is available on debian jessie and ubuntu trusty (but no nuget)
 matrix:
  allow_failures:
   - mono: weekly
   - mono: alpha
-  - mono: 3.2.8
 install:
   - make packages
 script:
   - make test
+  - make deb
