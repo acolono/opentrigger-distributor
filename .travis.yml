@@ -4,15 +4,14 @@ env:
   global:
   - TARGET=Rebuild
   matrix:
-  - CONFIGURATION=Debug
   - CONFIGURATION=Release
+  - CONFIGURATION=Debug
 addons:
   apt:
     packages:
     - nuget
     - nunit-console
     - make
-    - env
 mono:
  - alpha
  - beta
@@ -28,6 +27,7 @@ matrix:
   - mono: weekly
   - mono: alpha
 install:
+  - env
   - make packages
 script:
   - make test
@@ -37,5 +37,5 @@ deploy:
   script: make publish
   on:
     branch: master
-    mono: 4.2.1
+    mono: 'latest'
     condition: $CONFIGURATION = Release
