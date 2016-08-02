@@ -9,11 +9,11 @@
       "TriggerTopic": "/opentrigger/signals/trigger", /* trigger messages will be published to this topic */
       "ReleaseTopic": "/opentrigger/signals/release", /* release messages will be published to this topic */
       "PublishFormat": "Json", /* Json | JsonPretty | HexString */
-      "ClientId": null, /* null will generate a random ClinetÍd */
+      "ClientId": null, /* null will generate a random Clinetid */
       "Distance": 100, /* possible delay between signals */
       "Skip": 0,
       "UniqueIdentifier": "Nrf51MacAndTokenCubePir", /* Mac | MacAndAdvertisingData | MacAndTokenCubePir | Nrf51MacAndTokenCubePir */
-      "IncludedMacs": [ "CA:9F:0A:00:66:20" ] /* Mac Address of your Button/s */
+      // "IncludedMacs": [ "CA:9F:0A:00:66:20" ] /* Mac Address of your Button/s */
     },
 
   ],
