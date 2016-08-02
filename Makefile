@@ -55,6 +55,7 @@ deb:
 	sed -i 's/__VERSION__/$(VERSION)/g' $(PKGNAME)/DEBIAN/control
 	make install -e INSTALL_ROOT=$(PKGNAME)$(INSTALL_ROOT)
 	fakeroot dpkg-deb --build $(PKGNAME)
+	rm -rf $(PKGNAME) 2> /dev/null || true
 	dpkg-deb -I $(PKGNAME).deb
 	@echo !----
 	@echo ! to install the package type:
