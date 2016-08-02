@@ -12,14 +12,14 @@ addons:
     - nuget
     - nunit-console
     - make
+    - env
 mono:
  - alpha
  - beta
  # mono 4.5.x - mcs seems to freeze, disabled for now
  # - weekly
+ # 4.4.2 important target - stable release at time of development (4.4.2 only available as :latest in travis for some reason)
  - latest
- # 4.4.2 important target - stable release at time of development
- - 4.4.2
  # 4.2.1 important target - is available on debian stretch and ubuntu xenial
  - 4.2.1
  # 3.2.8 best-affort target - is available on debian jessie and ubuntu trusty (but no nuget)
@@ -37,5 +37,5 @@ deploy:
   script: make publish
   on:
     branch: master
-    mono: 4.4.2
+    mono: 4.2.1
     condition: $CONFIGURATION = Release
