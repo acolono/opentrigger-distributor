@@ -2,7 +2,8 @@ Package: opentrigger-distributor
 Maintainer: Acolono GmbH <hello@acolono.com>
 Architecture: __ARCH__
 Version: __VERSION__
-Depends: mono-runtime (>= 4.2.1), supervisor, opentrigger-otraw2q
+Depends: mono-runtime (>= 4.2.1)
+Recommends: supervisor, opentrigger-otraw2q
 Provides: opentrigger-distributor
 Description: opentrigger.com
  https://github.com/acolono/opentrigger-distributor

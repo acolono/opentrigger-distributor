@@ -31,3 +31,10 @@ install:
 script:
   - make test
   - make deb
+deploy:
+  provider: script
+  script: make publish
+  on:
+    branch: master
+    mono: latest
+    condition: $CONFIGURATION = Release
