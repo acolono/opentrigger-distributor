@@ -3,6 +3,9 @@ ILREPACK = mono $(shell readlink -f `find packages/ -name 'ILRepack.exe'`)
 TARGET ?= Build
 INSTALL_ROOT = /
 INSTALL_DEB ?= no
+VERSION = $(shell git describe --tags | sed -e 's/^v//')
+ARCH = all
+PKGNAME = opentrigger-distributor_$(VERSION)-$(CONFIGURATION)_$(ARCH)
 
 .PHONY: build install test deb checkinstall
 
@@ -36,9 +39,12 @@ checkinstall:
 	--pkgname opentrigger-distributor -A all --pkglicense MIT --maintainer 'info@acolono.com' --pkgsource 'https://github.com/acolono/opentrigger-distributor' \
 	--pkgrelease $(CONFIGURATION) --requires 'mono-runtime \(\>= 4.2.1\), supervisor, opentrigger-otraw2q' --nodoc make install
 
-deb: VERSION = $(shell git describe --tags | sed -e 's/^v//')
-deb: ARCH = all
-deb: PKGNAME = opentrigger-distributor_$(VERSION)-$(CONFIGURATION)_$(ARCH)
+publish:
+	@test -n "$(BINTRAYAUTH)" || { echo "Error: BINTRAYAUTH not defined" ; false ; }
+	@test -f "$(PKGNAME).deb" || { echo "Error: $(PKGNAME).deb does not exist" ; false ; }
+	@curl -H "Content-Type: application/json" -u "$(BINTRAYAUTH)" -X POST -d '{"name":"$(VERSION)","desc":"$(VERSION) $(CONFIGURATION)"}' https://bintray.com/api/v1/packages/ao/opentrigger/opentrigger-distributor/versions
+	@curl -u "$(BINTRAYAUTH)" -X PUT --data-binary "@$(PKGNAME).deb" -H "X-Bintray-Publish: 1" -H "X-Bintray-Override: 1" -H "X-Bintray-Debian-Distribution: jessie" -H "X-Bintray-Debian-Component: main" -H "X-Bintray-Debian-Architecture: $(ARCH)" 'https://bintray.com/api/v1/content/ao/opentrigger/opentrigger-distributor/$(VERSION)/pool/main/o/$(PKGNAME).deb'
+
 deb:
 	rm -rf $(PKGNAME) 2> /dev/null || true
 	rm -rf $(PKGNAME).deb 2> /dev/null || true
