@@ -27,7 +27,6 @@ matrix:
   - mono: weekly
   - mono: alpha
 install:
-  - env
   - make packages
 script:
   - make test
@@ -37,5 +36,4 @@ deploy:
   script: make publish
   on:
     branch: master
-    mono: 'latest'
-    condition: $CONFIGURATION = Release
+    condition: '( $CONFIGURATION = Release ) && ( `mono --version | grep -q "compiler version 4.2.1" && echo 1`)'
