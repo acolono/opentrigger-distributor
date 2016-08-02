@@ -34,6 +34,7 @@ script:
 deploy:
   provider: script
   script: make publish
+  skip_cleanup: true
   on:
     branch: master
     condition: '( $CONFIGURATION = Release ) && ( `mono --version | grep -q "compiler version 4.2.1" && echo 1`)'
