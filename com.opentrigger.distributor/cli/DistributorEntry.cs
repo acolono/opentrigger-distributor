@@ -10,6 +10,7 @@ namespace com.opentrigger.distributord
 {
     class DistributorEntry
     {
+        private static bool keepRunning = true;
         static void Main(string[] args)
         {
             // 0 = Quiet
@@ -57,19 +58,29 @@ namespace com.opentrigger.distributord
 
             config.Verbosity += verbosity;
 
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                if(!eventArgs.Cancel) return;
+                eventArgs.Cancel = false;
+                keepRunning = false;
+                if (config.Verbosity > 0) Console.WriteLine("Ctrl+C");
+            };
+
             if(config.Verbosity > 0) Console.WriteLine(config.Serialize());
 
             var distributors = config.QueueDistributorConfigs.Select(queueDistributorConfig => new QueueDistributor(queueDistributorConfig,config.Verbosity)).ToList();
-            if (config.RunParallel) while (true)
+            if (config.RunParallel) while (keepRunning)
             {
                 Parallel.ForEach(distributors, d => d.Distribute());
                 Thread.Sleep(config.IdleCycle);
             }
-            else while (true)
+            else while (keepRunning)
             {
                 distributors.ForEach(d=>d.Distribute());
                 Thread.Sleep(config.IdleCycle);
             }
+
+            if (config.Verbosity > 0) Console.WriteLine("normal shutdown");
         }
     }
 }
