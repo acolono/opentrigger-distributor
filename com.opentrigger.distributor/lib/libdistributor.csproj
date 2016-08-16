@@ -37,6 +37,9 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CoAP.NET">
+      <HintPath>..\..\CoAP.NET\CoAP.NET.dll</HintPath>
+    </Reference>
     <Reference Include="M2Mqtt.Mono, Version=4.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\org.eclipse.paho.mqtt.m2mqtt\M2Mqtt.Mono.dll</HintPath>
