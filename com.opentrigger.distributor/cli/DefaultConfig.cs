@@ -10,7 +10,7 @@ namespace com.opentrigger.cli.distributord
     {
         public DistributorConfig GetDefaultDistributorConfig()
         {
-            var connection = string.Intern("tcp://fserv");
+            var connection = string.Intern("mqtt://pi3");
             var includeMacs_TokenCube = new[] { "F1:11:11:11:10:12", "CA:9F:0A:00:66:20" };
             var includeMacs_WhiteButtons = new[] { "0C:F3:EE:00:2D:00", "0C:F3:EE:00:2E:7D" };
 
@@ -43,6 +43,18 @@ namespace com.opentrigger.cli.distributord
                     //    IncludedMacs = includeMacs_TokenCube,
                     //    ExcludedMacs = excludeMacs,
                     //},
+                },
+
+                CoapDistributorConfigs = new []
+                {
+                    new CoapDistributorConfig
+                    {
+                        Connection = connection,
+                        ButtonUris = new []
+                        {
+                            "coap://pi3:5683/s/button"
+                        }
+                    },
                 },
                 RunParallel = true,
             };

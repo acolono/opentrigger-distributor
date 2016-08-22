@@ -7,16 +7,22 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 namespace com.opentrigger.distributord
 {
     [JsonObject(MemberSerialization.OptOut)]
-    public class QueueDistributorConfig
+    public class DistributorConfigBase
     {
-
         public string Connection { get; set; } = "tcp://127.0.0.1:1883";
         public IEnumerable<QosLevel> QosLevels { get; set; } = new[] { QosLevel.AtMostOnce };
-        public IEnumerable<string> RawHexTopics { get; set; } = new []{"/opentrigger/rawhex/#"};
         public string TriggerTopic { get; set; } = "/opentrigger/signals/trigger";
         public string ReleaseTopic { get; set; } = "/opentrigger/signals/release";
-        public PublishFormat PublishFormat { get; set; } = PublishFormat.Json;
+        public PublishFormat PublishFormat { get; set; } = PublishFormat.JsonPretty;
         public string ClientId { get; set; } = null;
+    }
+
+    [JsonObject(MemberSerialization.OptOut)]
+    public class QueueDistributorConfig : DistributorConfigBase
+    {
+
+        
+        public IEnumerable<string> RawHexTopics { get; set; } = new []{"/opentrigger/rawhex/#"};
         public int Distance { get; set; } = 2000;
         public int Skip { get; set; } = 1;
         public UniqueIdentifier UniqueIdentifier { get; set; } = UniqueIdentifier.Mac;
@@ -55,8 +61,15 @@ namespace com.opentrigger.distributord
     public class DistributorConfig
     {
         public IEnumerable<QueueDistributorConfig> QueueDistributorConfigs { get; set; }
+        public IEnumerable<CoapDistributorConfig> CoapDistributorConfigs { get; set; }
         public int Verbosity { get; set; } = 1;
         public int IdleCycle { get; set; } = 500;
         public bool RunParallel { get; set; } = false;
+    }
+
+    [JsonObject(MemberSerialization.OptOut)]
+    public class CoapDistributorConfig : DistributorConfigBase
+    {
+        public IEnumerable<string> ButtonUris;
     }
 }

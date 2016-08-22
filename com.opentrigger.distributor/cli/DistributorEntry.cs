@@ -19,6 +19,7 @@ namespace com.opentrigger.distributord
             // 3 = Take, Skip, PublishFails
             // 4 = Duplicates
             // 5 = Excluded
+            // 6 = all
 
             int verbosity = 0 + args.Count(arg => arg == "-v" || arg == "--verbose") - args.Count(arg => arg == "-q" || arg == "--quiet");
 
@@ -68,7 +69,18 @@ namespace com.opentrigger.distributord
 
             if(config.Verbosity > 0) Console.WriteLine(config.Serialize());
 
-            var distributors = config.QueueDistributorConfigs.Select(queueDistributorConfig => new QueueDistributor(queueDistributorConfig,config.Verbosity)).ToList();
+            var distributors = new List<IDistributor>();
+            if (config.QueueDistributorConfigs != null && config.QueueDistributorConfigs.Any())
+            {
+                distributors.AddRange(config.QueueDistributorConfigs.Select(queueDistributorConfig => new QueueDistributor(queueDistributorConfig, config.Verbosity)));
+            }
+            if (config.CoapDistributorConfigs != null && config.CoapDistributorConfigs.Any())
+            {
+                distributors.AddRange(config.CoapDistributorConfigs.Select(coapDistributorConfig => new CoapDistributor(coapDistributorConfig, config.Verbosity)));
+            }
+
+            if(distributors.Count == 0) throw new InvalidOperationException("No distributors configured");
+
             if (config.RunParallel) while (keepRunning)
             {
                 Parallel.ForEach(distributors, d => d.Distribute());

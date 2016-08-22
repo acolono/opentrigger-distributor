@@ -28,6 +28,7 @@ namespace com.opentrigger.tests
         {
             var config = new DistributorConfig();
             config.QueueDistributorConfigs = new List<QueueDistributorConfig> {new QueueDistributorConfig()};
+            config.CoapDistributorConfigs = new List<CoapDistributorConfig> {new CoapDistributorConfig()};
             var json = config.Serialize(false).Deserialize<DistributorConfig>().Serialize();
             var obj = json.Deserialize<DistributorConfig>();
             Debug.WriteLine(json);
@@ -86,7 +87,7 @@ namespace com.opentrigger.tests
             {
                 pf.Add(new PacketData
                 {
-                    OriginTopic = $"/{uid}/{j}/xyz",
+                    Origin = $"/{uid}/{j}/xyz",
                     UniqueIdentifier = $"{uid}-{j}",
                     Packet = new BtleDecoded()
                 });

@@ -55,6 +55,9 @@
   <ItemGroup>
     <Compile Include="BinaryStringExtensions.cs" />
     <Compile Include="BtleDecoder.cs" />
+    <Compile Include="CoapDistributor.cs" />
+    <Compile Include="IDistributor.cs" />
+    <Compile Include="MqttClientFactory.cs" />
     <Compile Include="PacketData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueDistributor.cs" />

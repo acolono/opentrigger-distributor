@@ -9,7 +9,7 @@ namespace com.opentrigger.distributord
         public DateTimeOffset Timestamp { get; set; }
         public BtleDecoded Packet { get; set; }
         public string UniqueIdentifier { get; set; }
-        public string OriginTopic { get; set; }
+        public string Origin { get; set; }
     }
 
     public class ReleaseData : PacketData
@@ -96,7 +96,7 @@ namespace com.opentrigger.distributord
                         UniqueIdentifier = data.UniqueIdentifier,
                         Packet = data.Packet,
                         Timestamp = data.Timestamp,
-                        OriginTopic = data.OriginTopic,
+                        Origin = data.Origin,
                         Age = (int)(DateTimeOffset.UtcNow - data.Timestamp).TotalMilliseconds,
                     });
                 }

@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="BasicTests.cs" />
     <Compile Include="BitsAndBytes.cs" />
+    <Compile Include="Coap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,7 @@ namespace com.opentrigger.distributord
 {
     public delegate bool ByteFilter(byte[] packetBytes);
 
-    public class QueueDistributor
+    public class QueueDistributor : IDistributor
     {
         private readonly MqttClient _client;
         private readonly QueueDistributorConfig _config;
@@ -20,12 +20,8 @@ namespace com.opentrigger.distributord
         {
             _verbosity = verbosity;
             _config = config;
-            var url = new Uri(_config.Connection);
-            if(url.Scheme != "tcp") throw new InvalidProgramException($"Schema: {url.Scheme} is not supported");
-            var port = url.Port > 0 ? url.Port : 1883;
-            _client = new MqttClient(url.Host, port, false, null, null, MqttSslProtocols.None);
-            if (string.IsNullOrWhiteSpace(_config.ClientId)) config.ClientId = Guid.NewGuid().ToString();
-            _client.Connect(_config.ClientId); //TODO: parse authentication parameters
+            _client = MqttClientFactory.CreateConnectedClient(config);
+
             _client.Subscribe(_config.RawHexTopics.ToArray(), _config.QosLevels.Select(qosLevel => (byte)qosLevel).ToArray());
 
             _packetFilter = new PacketFilter(_config.Skip, _config.Distance, _verbosity);
@@ -80,7 +76,7 @@ namespace com.opentrigger.distributord
                             var data = new PacketData
                             {
                                 Packet = btData,
-                                OriginTopic = args.Topic
+                                Origin = args.Topic
                             };
                             switch (_config.UniqueIdentifier)
                             {
