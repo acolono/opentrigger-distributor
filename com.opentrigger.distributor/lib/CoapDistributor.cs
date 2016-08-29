@@ -32,6 +32,7 @@ namespace com.opentrigger.distributord
         public DateTimeOffset? LastSeen { get; set; }
         public DateTimeOffset? LastDown { get; set; }
         public int? LastEventId { get; set; }
+        public ButtonConfiguration Config { get; set; }
     }
 
     public class CoapDistributor : IDistributor
@@ -69,15 +70,16 @@ namespace com.opentrigger.distributord
             //((CoapConfig) EndPointManager.Default.Config).NotificationReregistrationBackoff = 1000*60*60;
 
             // TODO: Try paralell with multiple buttons
-            foreach (var buttonUri in _config.ButtonUris)
+            foreach (var buttonConfiguration in _config.ButtonConfigurations)
             {
-                SetupButton(buttonUri);
+                SetupButton(buttonConfiguration);
             }
         }
 
-        private void SetupButton(string buttonUri)
+        private void SetupButton(ButtonConfiguration buttonConfig)
         {
-            var request = new Request(Method.GET) { URI = new Uri(buttonUri)};
+
+            var request = new Request(Method.GET) { URI = buttonConfig.BuildButtonUri()};
             //((CoapConfig) request.EndPoint.Config).NotificationReregistrationBackoff = 1000*60*60;
             //request.MaxAge = 60*60;
 
@@ -90,7 +92,7 @@ namespace com.opentrigger.distributord
                     var status = _buttonStates.SingleOrDefault(b => b.Uri == uri);
                     if (status == null)
                     {
-                        status = new CoapButtonStatus { Uri = uri };
+                        status = new CoapButtonStatus { Uri = uri, Config = buttonConfig};
                         _buttonStates.Add(status);
                     }
                     status.Working = true;
@@ -111,6 +113,17 @@ namespace com.opentrigger.distributord
                     request.TimedOut += TimeoutHandler;
                     request.Respond += statusHandler;
                     request.Respond += ResponseHandler;
+
+                    var initBlinkUrl = buttonConfig.BuildButtonUri();
+                    if (initBlinkUrl != null && !string.IsNullOrWhiteSpace(buttonConfig.InitLedPayload))
+                    {
+                        var initBlink = new Request(Method.PUT)
+                        {
+                            URI = initBlinkUrl,
+                            PayloadString = buttonConfig.InitLedPayload
+                        };
+                        initBlink.Send();
+                    }
                 }
                 else
                 {
@@ -153,6 +166,18 @@ namespace com.opentrigger.distributord
                     if(!status.LastDown.HasValue) return; /* lingering/duplicate, etc... */
                     age = DateTimeOffset.Now - status.LastDown.Value;
                     status.LastDown = null;
+
+                    var ackUrl = status.Config.BuildLedUri();
+                    if (ackUrl != null && !string.IsNullOrWhiteSpace(status.Config.AckLedPayload))
+                    {
+                        var initBlink = new Request(Method.PUT)
+                        {
+                            URI = ackUrl,
+                            PayloadString = status.Config.AckLedPayload,
+                        };
+                        initBlink.Send();
+                    }
+
                 }
                 else
                 {

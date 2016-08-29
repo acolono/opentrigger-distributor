@@ -50,9 +50,9 @@ namespace com.opentrigger.cli.distributord
                     new CoapDistributorConfig
                     {
                         Connection = connection,
-                        ButtonUris = new []
+                        ButtonConfigurations = new []
                         {
-                            "coap://pi3:5683/s/button"
+                            new ButtonConfiguration { BaseUri = "coap://pi3:5683/" },
                         }
                     },
                 },

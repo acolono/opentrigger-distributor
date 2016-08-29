@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -68,8 +69,28 @@ namespace com.opentrigger.distributord
     }
 
     [JsonObject(MemberSerialization.OptOut)]
+    public class ButtonConfiguration
+    {
+        public string BaseUri { get; set; }
+        public string ButtonPath { get; set; } = "s/button";
+        public string LedPath { get; set; } = "s/led";
+        public string InitLedPayload { get; set; } = "mode=blink&times=5&delay=30";
+        public string AckLedPayload { get; set; } = "mode=blink";
+
+        public Uri BuildButtonUri() => BuildUri(ButtonPath);
+        public Uri BuildLedUri() => BuildUri(LedPath);
+        private Uri BuildUri(string path)
+        {
+            if (string.IsNullOrWhiteSpace(BaseUri)) return null;
+            var ub = new UriBuilder(BaseUri);
+            ub.Path = path;
+            return ub.Uri;
+        }
+    }
+
+    [JsonObject(MemberSerialization.OptOut)]
     public class CoapDistributorConfig : DistributorConfigBase
     {
-        public IEnumerable<string> ButtonUris;
+        public IEnumerable<ButtonConfiguration> ButtonConfigurations;
     }
 }
