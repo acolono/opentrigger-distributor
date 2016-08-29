@@ -15,17 +15,20 @@ addons:
 mono:
  - alpha
  - beta
- # mono 4.5.x - mcs seems to freeze, disabled for now
- # - weekly
+ - weekly
  # 4.4.2 important target - stable release at time of development (4.4.2 only available as :latest in travis for some reason)
- - latest
+ - latest 
+ - 4.4.1
+ - 4.4.0
+ - 4.2.3
  # 4.2.1 important target - is available on debian stretch and ubuntu xenial
  - 4.2.1
- # 3.2.8 best-affort target - is available on debian jessie and ubuntu trusty (but no nuget)
+ # 3.2.8 no nuget - is available on debian jessie and ubuntu trusty 
 matrix:
  allow_failures:
   - mono: weekly
   - mono: alpha
+  - mono: beta
 install:
   - make packages
 script:
