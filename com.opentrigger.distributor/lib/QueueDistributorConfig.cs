@@ -74,8 +74,8 @@ namespace com.opentrigger.distributord
         public string BaseUri { get; set; }
         public string ButtonPath { get; set; } = "s/button";
         public string LedPath { get; set; } = "s/led";
-        public string InitLedPayload { get; set; } = "mode=blink&times=5&delay=30";
-        public string AckLedPayload { get; set; } = "mode=blink";
+        public string InitLedPayload { get; set; } //= "mode=blink&times=5&delay=30";
+        public string AckLedPayload { get; set; } //= "mode=blink";
 
         public Uri BuildButtonUri() => BuildUri(ButtonPath);
         public Uri BuildLedUri() => BuildUri(LedPath);
