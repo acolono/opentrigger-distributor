@@ -228,13 +228,12 @@ namespace com.opentrigger.distributord
                             EventId = eventId
                         }
                     };
-                    Publish(_config.ReleaseTopic, data);
+                    Publish(_config.TriggerTopic, data);
                 }
 
                 var origin = req.URI.GetLeftPart(UriPartial.Authority);
                 var uid = req.URI.ToString();
-
-                Console.WriteLine($"eventId={eventId}, state={state}, age={age}, origin={origin}, uid={uid}");
+                if(_verbosity > 0) Console.WriteLine($"eventId={eventId}, state={(state?"Up":"Down")}, age={age}, origin={origin}, uid={uid}");
                 //Console.WriteLine(_buttonStates.Serialize());
             }
         }
