@@ -38,6 +38,7 @@ namespace com.opentrigger.distributord
     public class CoapPacket
     {
         public int EventId { get; set; }
+        public int State { get; set; }
         public ButtonConfiguration CoapButtonConfiguration { get; set; }
     }
 
@@ -112,18 +113,6 @@ namespace com.opentrigger.distributord
                     CoapRequest = request,
                     Working = false,
                 });
-
-                //TODO: Move!
-                //var initBlinkUrl = buttonConfig.BuildButtonUri();
-                //if (initBlinkUrl != null && !string.IsNullOrWhiteSpace(buttonConfig.InitLedPayload))
-                //{
-                //    var initBlink = new Request(Method.PUT)
-                //    {
-                //        URI = initBlinkUrl,
-                //        PayloadString = buttonConfig.InitLedPayload
-                //    };
-                //    initBlink.Send();
-                //}   
             }
         }
 
@@ -153,9 +142,26 @@ namespace com.opentrigger.distributord
 
         private void ResponseHandler(object o, ResponseEventArgs e)
         {
-            
-            
-            if(e.Response.Duplicate) return; /* only handles coap duplicates */
+            var req = (Request)o;
+            lock (_buttonStates)
+            {
+                var status = _buttonStates.SingleOrDefault(s => s.Uri == req.URI.ToString());
+                if (status?.Working == false)
+                {
+                    var blinkUri = status.Config.BuildLedUri();
+                    if (blinkUri != null && !string.IsNullOrWhiteSpace(status.Config.InitLedPayload))
+                    {
+                        var blink = new Request(Method.PUT)
+                        {
+                            URI = blinkUri,
+                            PayloadString = status.Config.InitLedPayload,
+                        };
+                        blink.Send();
+                    }
+                }
+            }
+
+            // if (e.Response.Duplicate) return; /* has false positives */
 
             // Parse: EVENT 0 STATE 0
             var match = Regex.Match(e.Message.PayloadString, @"^EVENT\s(\S+)\sSTATE\s([01])");
@@ -165,12 +171,11 @@ namespace com.opentrigger.distributord
                 return;
             }
             var eventId = int.Parse(match.Groups[1].Value);
-            var state = int.Parse(match.Groups[2].Value) == 1;
+            var state = int.Parse(match.Groups[2].Value);
             
 
             lock (_buttonStates)
             {
-                var req = (Request)o;
                 var status = _buttonStates.SingleOrDefault(s => s.Uri == req.URI.ToString());
                 if (status == null) return;
                 status.LastSeen = DateTimeOffset.UtcNow;
@@ -178,8 +183,14 @@ namespace com.opentrigger.distributord
                 if(status.LastEventId.HasValue && status.LastEventId == eventId) return; /* duplicate */
                 status.LastEventId = eventId;
                 TimeSpan? age = null;
+                var coapPacket = new CoapPacket
+                {
+                    CoapButtonConfiguration = status.Config,
+                    EventId = eventId,
+                    State = state,
+                };
 
-                if (state)
+                if (state == 1)
                 {
                     //UP
                     if(!status.LastDown.HasValue) return; /* lingering/duplicate, etc... */
@@ -192,23 +203,19 @@ namespace com.opentrigger.distributord
                         UniqueIdentifier = req.URI.ToString(),
                         Timestamp = DateTimeOffset.UtcNow,
                         Age = (int)age.Value.TotalMilliseconds,
-                        Packet = new CoapPacket
-                        {
-                            CoapButtonConfiguration = status.Config,
-                            EventId = eventId
-                        }
+                        Packet = coapPacket,
                     };
                     Publish(_config.ReleaseTopic, data);
 
-                    var ackUrl = status.Config.BuildLedUri();
-                    if (ackUrl != null && !string.IsNullOrWhiteSpace(status.Config.AckLedPayload))
+                    var blinkUri = status.Config.BuildLedUri();
+                    if (blinkUri != null && !string.IsNullOrWhiteSpace(status.Config.AckLedPayload))
                     {
-                        var initBlink = new Request(Method.PUT)
+                        var blink = new Request(Method.PUT)
                         {
-                            URI = ackUrl,
+                            URI = blinkUri,
                             PayloadString = status.Config.AckLedPayload,
                         };
-                        initBlink.Send();
+                        blink.Send();
                     }
 
                 }
@@ -222,18 +229,14 @@ namespace com.opentrigger.distributord
                         Origin = req.URI.GetLeftPart(UriPartial.Authority),
                         UniqueIdentifier = req.URI.ToString(),
                         Timestamp = DateTimeOffset.UtcNow,
-                        Packet = new CoapPacket
-                        {
-                            CoapButtonConfiguration = status.Config,
-                            EventId = eventId
-                        }
+                        Packet = coapPacket
                     };
                     Publish(_config.TriggerTopic, data);
                 }
 
                 var origin = req.URI.GetLeftPart(UriPartial.Authority);
                 var uid = req.URI.ToString();
-                if(_verbosity > 0) Console.WriteLine($"eventId={eventId}, state={(state?"Up":"Down")}, age={age}, origin={origin}, uid={uid}");
+                if(_verbosity > 0) Console.WriteLine($"eventId={eventId}, state={(state == 1?"Up":"Down")}, age={age}, origin={origin}, uid={uid}");
                 //Console.WriteLine(_buttonStates.Serialize());
             }
         }
@@ -256,7 +259,16 @@ namespace com.opentrigger.distributord
         {
             lock (_buttonStates)
             {
-                var defunktButtons = _buttonStates.Where(b => !b.Working || !b.LastSeen.HasValue || (DateTimeOffset.UtcNow - b.LastSeen.Value).TotalSeconds > 60).ToList();
+                foreach (var button in _buttonStates)
+                {
+                    if(button.LastSeen == null || button.Config.KeepaliveRequestInterval == null) continue;
+                    if ((DateTimeOffset.UtcNow - button.LastSeen.Value).TotalSeconds >= button.Config.KeepaliveRequestInterval.Value)
+                    {
+                        button.LastSeen = null;
+                    }
+                }
+
+                var defunktButtons = _buttonStates.Where(b => !b.Working || !b.LastSeen.HasValue).ToList();
                 foreach (var defunktButton in defunktButtons)
                 {
                     defunktButton.Working = false;

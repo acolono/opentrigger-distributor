@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -15,7 +14,7 @@ namespace com.opentrigger.distributord
         public string TriggerTopic { get; set; } = "/opentrigger/signals/trigger";
         public string ReleaseTopic { get; set; } = "/opentrigger/signals/release";
         public PublishFormat PublishFormat { get; set; } = PublishFormat.JsonPretty;
-        public string ClientId { get; set; } = null;
+        public string ClientId { get; set; }
     }
 
     [JsonObject(MemberSerialization.OptOut)]
@@ -74,18 +73,9 @@ namespace com.opentrigger.distributord
         public string BaseUri { get; set; }
         public string ButtonPath { get; set; } = "s/button";
         public string LedPath { get; set; } = "s/led";
-        public string InitLedPayload { get; set; } //= "mode=blink&times=5&delay=30";
-        public string AckLedPayload { get; set; } //= "mode=blink";
-
-        public Uri BuildButtonUri() => BuildUri(ButtonPath);
-        public Uri BuildLedUri() => BuildUri(LedPath);
-        private Uri BuildUri(string path)
-        {
-            if (string.IsNullOrWhiteSpace(BaseUri)) return null;
-            var ub = new UriBuilder(BaseUri);
-            ub.Path = path;
-            return ub.Uri;
-        }
+        public string InitLedPayload { get; set; } = "mode=blink&times=5&delay=30";
+        public string AckLedPayload { get; set; } = "mode=blink";
+        public double? KeepaliveRequestInterval { get; set; }
     }
 
     [JsonObject(MemberSerialization.OptOut)]
