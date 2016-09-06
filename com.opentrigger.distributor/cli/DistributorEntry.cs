@@ -79,7 +79,7 @@ namespace com.opentrigger.distributord
                 distributors.AddRange(config.CoapDistributorConfigs.Select(coapDistributorConfig => new CoapDistributor(coapDistributorConfig, config.Verbosity)));
             }
 
-            if (config.CoapDistributorConfigs != null && config.FlicDistributorConfigs.Any())
+            if (config.FlicDistributorConfigs != null && config.FlicDistributorConfigs.Any())
             {
                 distributors.AddRange(config.FlicDistributorConfigs.Select(flicDistributorConfig => new FlicDistributor(flicDistributorConfig, config.Verbosity)));
             }
