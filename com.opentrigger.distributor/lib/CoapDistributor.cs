@@ -204,6 +204,7 @@ namespace com.opentrigger.distributord
                         Timestamp = DateTimeOffset.UtcNow,
                         Age = (int)age.Value.TotalMilliseconds,
                         Packet = coapPacket,
+                        EventType = EventType.Release,
                     };
                     Publish(_config.ReleaseTopic, data);
 
@@ -229,7 +230,8 @@ namespace com.opentrigger.distributord
                         Origin = req.URI.GetLeftPart(UriPartial.Authority),
                         UniqueIdentifier = req.URI.ToString(),
                         Timestamp = DateTimeOffset.UtcNow,
-                        Packet = coapPacket
+                        Packet = coapPacket,
+                        EventType = EventType.Trigger,
                     };
                     Publish(_config.TriggerTopic, data);
                 }

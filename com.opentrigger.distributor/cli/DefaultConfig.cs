@@ -56,7 +56,15 @@ namespace com.opentrigger.cli.distributord
                         }
                     },
                 },
+                FlicDistributorConfigs = new[]
+                {
+                    new FlicDistributorConfig
+                    {
+                        Connection = connection,
+                    }
+                },
                 RunParallel = true,
+                Verbosity = 2
             };
             return config;
         }

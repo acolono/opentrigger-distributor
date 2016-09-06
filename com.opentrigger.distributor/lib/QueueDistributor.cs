@@ -29,12 +29,14 @@ namespace com.opentrigger.distributord
             _packetFilter.OnTrigger = data =>
             {
                 if (_verbosity > 0) Console.WriteLine($"TRIGGER: {data.UniqueIdentifier}");
+                data.EventType = EventType.Trigger;
                 Publish(_config.TriggerTopic, data);
             };
 
             _packetFilter.OnRelease = data =>
             {
                 if (_verbosity > 0) Console.WriteLine($"RELEASE: {data.UniqueIdentifier} Age:{DateTimeOffset.UtcNow - data.Timestamp}");
+                data.EventType = EventType.Release;
                 Publish(_config.ReleaseTopic, data);
             };
 
@@ -58,8 +60,11 @@ namespace com.opentrigger.distributord
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine($"Malformed Packet: {Encoding.UTF8.GetString(args.Message)}");
-                    Console.WriteLine(exception);
+                    if (_verbosity >= 4)
+                    {
+                        Console.WriteLine($"Malformed Packet: {Encoding.UTF8.GetString(args.Message)}");
+                        Console.WriteLine(exception);
+                    }
                     return;
                 }
                 

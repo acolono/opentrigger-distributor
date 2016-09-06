@@ -4,12 +4,13 @@ using System.Linq;
 
 namespace com.opentrigger.distributord
 {
-
+    
     public class PacketBase
     {
         public DateTimeOffset Timestamp { get; set; }
         public string UniqueIdentifier { get; set; }
         public string Origin { get; set; }
+        public EventType EventType { get; set; }
     }
 
     public class PacketData : PacketBase

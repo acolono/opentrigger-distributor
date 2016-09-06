@@ -16,19 +16,21 @@ namespace com.opentrigger.distributord
         public PublishFormat PublishFormat { get; set; } = PublishFormat.JsonPretty;
         public string ClientId { get; set; }
     }
+    [JsonObject(MemberSerialization.OptOut)]
+    public class FlicDistributorConfig : DistributorConfigBase
+    {
+        public IEnumerable<string> RawFlicTopics { get; set; } = new[] { "/opentrigger/rawflic" };
+    }
 
     [JsonObject(MemberSerialization.OptOut)]
     public class QueueDistributorConfig : DistributorConfigBase
     {
-
-        
         public IEnumerable<string> RawHexTopics { get; set; } = new []{"/opentrigger/rawhex/#"};
         public int Distance { get; set; } = 2000;
         public int Skip { get; set; } = 1;
         public UniqueIdentifier UniqueIdentifier { get; set; } = UniqueIdentifier.Mac;
         public IEnumerable<string> ExcludedMacs { get; set; } = null;
         public IEnumerable<string> IncludedMacs { get; set; } = null;
-
     }
 
     [JsonConverter(typeof (StringEnumConverter))]
@@ -38,6 +40,13 @@ namespace com.opentrigger.distributord
         JsonPretty,
         HexString, /* convert for wireshark like: echo $LINE| xxd -r -p | od -Ax -tx1 -v */
         //TODO: Bson,Binary,?
+    }
+
+    [JsonConverter(typeof (StringEnumConverter))]
+    public enum EventType
+    {
+        Trigger,
+        Release,
     }
 
     [JsonConverter(typeof (StringEnumConverter))]
@@ -62,6 +71,7 @@ namespace com.opentrigger.distributord
     {
         public IEnumerable<QueueDistributorConfig> QueueDistributorConfigs { get; set; }
         public IEnumerable<CoapDistributorConfig> CoapDistributorConfigs { get; set; }
+        public IEnumerable<FlicDistributorConfig> FlicDistributorConfigs { get; set; }
         public int Verbosity { get; set; } = 1;
         public int IdleCycle { get; set; } = 500;
         public bool RunParallel { get; set; } = false;

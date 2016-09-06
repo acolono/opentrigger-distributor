@@ -17,7 +17,7 @@ namespace com.opentrigger.distributord
             // 1 = Trigger/Release, print config
             // 2 = Json
             // 3 = Take, Skip, PublishFails
-            // 4 = Duplicates
+            // 4 = Duplicates, Decoding problems
             // 5 = Excluded
             // 6 = all
 
@@ -79,7 +79,12 @@ namespace com.opentrigger.distributord
                 distributors.AddRange(config.CoapDistributorConfigs.Select(coapDistributorConfig => new CoapDistributor(coapDistributorConfig, config.Verbosity)));
             }
 
-            if(distributors.Count == 0) throw new InvalidOperationException("No distributors configured");
+            if (config.CoapDistributorConfigs != null && config.FlicDistributorConfigs.Any())
+            {
+                distributors.AddRange(config.FlicDistributorConfigs.Select(flicDistributorConfig => new FlicDistributor(flicDistributorConfig, config.Verbosity)));
+            }
+
+            if (distributors.Count == 0) throw new InvalidOperationException("No distributors configured");
 
             if (config.RunParallel) while (keepRunning)
             {
