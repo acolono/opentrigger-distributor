@@ -73,7 +73,7 @@ namespace com.opentrigger.distributord
                 result.ManufacturerSpecific.Data[1] == 0x01 /* Firmware/Format Version */
                 )
             {
-                byte alarmByte = 0x80;
+                //byte alarmByte = 0x80;
                 using (var ms = new MemoryStream(result.ManufacturerSpecific.Data))
                 using (var br = new BinaryReader(ms))
                 {
@@ -81,7 +81,7 @@ namespace com.opentrigger.distributord
                     while (!br.EndOfStream())
                     {
                         var sensorType = br.ReadByte();
-                        var alarm = (sensorType & alarmByte) == alarmByte;
+                        //var alarm = (sensorType & alarmByte) == alarmByte;
                         if (sensorType == 0x01 || sensorType == 0x81) // 0x01	0x81	Temperature	°C	int16, MSB first. Example: 5123 = 51.23 DegC.
                         {
                             var temperature = br.ReadInt16MsbFirst() / 100M;
