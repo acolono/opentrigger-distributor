@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Web;
 using CoAP;
@@ -29,20 +30,15 @@ namespace com.opentrigger.distributord
         {
             try
             {
-                var source = ((IPEndPoint)exchange.Request.Source).Address.ToString();
+                var source = ((IPEndPoint)exchange.Request.Source);
+                var isIPv6 = source.Address.AddressFamily == AddressFamily.InterNetworkV6;
+                var ip = source.Address.ToString();
+                if (isIPv6) ip = $"[{ip}]";
                 var query = HttpUtility.ParseQueryString(exchange.Request.PayloadString);
-                query.Add("source", source);
+                query.Add("source", ip);
 
                 OnPostData?.Invoke(query);
-
-                var sb = new StringBuilder();
-
-                foreach (var q in query.AllKeys)
-                {
-                    sb.AppendLine($"{q}: '{query.Get(q)}'");
-                }
-                Console.Write(sb.ToString());
-                exchange.Respond(StatusCode.Content, sb.ToString());
+                exchange.Respond(StatusCode.Valid);
             }
             catch (Exception exception)
             {
@@ -87,6 +83,20 @@ namespace com.opentrigger.distributord
         public void Stop()
         {
             Server.Stop();
+        }
+    }
+
+    public static class NameValueCollectionExt
+    {
+        public static int? GetInt(this NameValueCollection collection, string key)
+        {
+            var i = collection.Get(key);
+            if (i != null)
+            {
+                int rval;
+                if (int.TryParse(i, out rval)) return rval;
+            }
+            return null;
         }
     }
 }

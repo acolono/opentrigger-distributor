@@ -42,13 +42,16 @@ namespace com.opentrigger.tests
                 PayloadString = "par1=1&par2=2"
             };
             request.Send();
-            request.WaitForResponse(1000);
+            var response = request.WaitForResponse(1000);
             listener.Stop();
+            
             Assert.IsNotNull(data);
-            Assert.IsTrue(data.Get("par1") == "1");
-            Assert.IsTrue(data.Get("par2") == "2");
+            Assert.IsTrue(data.GetInt("par1") == 1);
+            Assert.IsTrue(data.GetInt("par2") == 2);
             Assert.IsFalse(string.IsNullOrWhiteSpace(data.Get("source")));
             Console.WriteLine(data.Get("source"));
+            var validResponseStatusCodes = new List<StatusCode>() { StatusCode.Valid, StatusCode.Content, StatusCode.Changed, StatusCode.Continue, StatusCode.Created, StatusCode.Deleted};
+            Assert.IsTrue(validResponseStatusCodes.Contains(response.StatusCode));
         }
     }
 }
