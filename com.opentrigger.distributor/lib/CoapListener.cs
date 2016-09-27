@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Web;
 using CoAP;
+using CoAP.Net;
 using CoAP.Server;
 using CoAP.Server.Resources;
 
@@ -52,13 +53,23 @@ namespace com.opentrigger.distributord
     {
         public event ButtonDataReceivedEvent OnButtonData;
         public event ExceptionEvent OnException;
-        public readonly int[] Ports;
         private CoapServer Server { get; set; }
 
-        public CoapListener(IEnumerable<int> ports )
+        public CoapListener()
+            : this(new []{ 5683 })
+        { }
+
+        public CoapListener(IEnumerable<int> ports)
         {
-            Ports = ports.ToArray();
-            Server = new CoapServer(Ports);
+            var coapPorts = ports.ToArray();
+            Server = new CoapServer();
+            foreach (var coapPort in coapPorts)
+            {
+                Server.AddEndPoint(IPAddress.Any, coapPort);
+                Server.AddEndPoint(IPAddress.IPv6Any, coapPort);
+                Server.AddEndPoint(IPAddress.Parse("::1"), coapPort);
+            }
+            
             var buttonResorce = new ButtonEventCoapResource("button");
             buttonResorce.OnPostData += ButtonResorceOnOnPostData;
             buttonResorce.OnException += ButtonResorceOnOnException;

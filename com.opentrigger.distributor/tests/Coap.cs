@@ -27,7 +27,7 @@ namespace com.opentrigger.tests
             var listener = new CoapListener(new []{ freePort });
             listener.Start();
 
-            var uri = new UriBuilder("coap://localhost/button") {Port = listener.Ports[0]};
+            var uri = new UriBuilder("coap://localhost/button") {Port = freePort};
 
             NameValueCollection data = null;
             listener.OnButtonData += d => { data = d; };
