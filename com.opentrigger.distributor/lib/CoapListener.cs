@@ -47,6 +47,8 @@ namespace com.opentrigger.distributord
                 exchange.Respond(StatusCode.InternalServerError, exception.ToString());
             }
         }
+
+        protected override void DoPut(CoapExchange exchange) {DoPost(exchange);}
     }
 
     public class CoapListener
