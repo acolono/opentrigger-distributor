@@ -16,14 +16,14 @@ mono:
  # alpha
  # beta
  # weekly
- # 4.4.2 important target - stable release at time of development (4.4.2 only available as :latest in travis for some reason)
- - latest 
+ - latest
+ # 4.4.2 stable release when development started
+ - 4.4.2 
  # 4.4.1
  # 4.4.0
  # 4.2.3
  # 4.2.1 important target - is available on debian stretch and ubuntu xenial
  - 4.2.1
- # 3.2.8 no nuget - is available on debian jessie and ubuntu trusty 
 matrix:
  allow_failures:
   - mono: weekly
