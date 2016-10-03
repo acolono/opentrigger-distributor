@@ -21,7 +21,8 @@ namespace com.opentrigger.distributord
             // 5 = Excluded
             // 6 = all
 
-            int verbosity = 0 + args.Count(arg => arg == "-v" || arg == "--verbose") - args.Count(arg => arg == "-q" || arg == "--quiet");
+            var verbosity = 0 + args.Count(arg => arg == "-v" || arg == "--verbose") - args.Count(arg => arg == "-q" || arg == "--quiet");
+            args.SetupCoapDump();
 
             // --roundtrip 172.17.17.136 --verbose
             var roundtripIndex = Array.IndexOf(args,"--roundtrip");

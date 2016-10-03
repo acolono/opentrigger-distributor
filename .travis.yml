@@ -1,5 +1,7 @@
 language: csharp
 sudo: false
+git:
+  depth: 1024
 env:
   global:
   - TARGET=Rebuild

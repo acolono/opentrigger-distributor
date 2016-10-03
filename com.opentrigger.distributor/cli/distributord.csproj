@@ -56,6 +56,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoapDump.cs" />
     <Compile Include="DefaultConfig.cs" />
     <Compile Include="DistributorEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

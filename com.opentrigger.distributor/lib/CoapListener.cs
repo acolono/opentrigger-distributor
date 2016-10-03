@@ -65,6 +65,7 @@ namespace com.opentrigger.distributord
         {
             var coapPorts = ports.ToArray();
             Server = new CoapServer();
+            ((CoapConfig)Server.Config).Deduplicator = "Noop";
             foreach (var coapPort in coapPorts)
             {
                 Server.AddEndPoint(IPAddress.Any, coapPort);
