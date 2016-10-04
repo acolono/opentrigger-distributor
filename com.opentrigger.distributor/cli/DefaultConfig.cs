@@ -8,7 +8,7 @@ namespace com.opentrigger.cli.distributord
 {
     class DefaultConfig
     {
-        public DistributorConfig GetDefaultDistributorConfig()
+        public DistributorConfig GetDefaultDebugDistributorConfig()
         {
             var connection = string.Intern("mqtt://pi3");
             var includeMacs_TokenCube = new[] { "F1:11:11:11:10:12", "CA:9F:0A:00:66:20" };
@@ -45,17 +45,17 @@ namespace com.opentrigger.cli.distributord
                     //},
                 },
 
-                CoapDistributorConfigs = new []
-                {
-                    new CoapDistributorConfig
-                    {
-                        Connection = connection,
-                        ButtonConfigurations = new []
-                        {
-                            new ButtonConfiguration { BaseUri = "coap://pi3:5683/" },
-                        }
-                    },
-                },
+                //CoapDistributorConfigs = new []
+                //{
+                //    new CoapDistributorConfig
+                //    {
+                //        Connection = connection,
+                //        ButtonConfigurations = new []
+                //        {
+                //            new ButtonConfiguration { BaseUri = "coap://pi3:5683/" },
+                //        }
+                //    },
+                //},
                 FlicDistributorConfigs = new[]
                 {
                     new FlicDistributorConfig
@@ -63,8 +63,16 @@ namespace com.opentrigger.cli.distributord
                         Connection = connection,
                     }
                 },
+
+                CoapServerDistributorConfigs = new CoapServerDistributorConfig[]
+                {
+                  new CoapServerDistributorConfig
+                  {
+                      Connection = connection,
+                  }  
+                },
                 RunParallel = true,
-                Verbosity = 2
+                Verbosity = 3
             };
             return config;
         }

@@ -50,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -58,6 +59,7 @@
     <Compile Include="BtleDecoder.cs" />
     <Compile Include="CoapDistributor.cs" />
     <Compile Include="CoapListener.cs" />
+    <Compile Include="CoapServerDistributor.cs" />
     <Compile Include="ConfigExtensions.cs" />
     <Compile Include="FlicDistributor.cs" />
     <Compile Include="IDistributor.cs" />

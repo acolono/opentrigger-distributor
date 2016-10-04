@@ -16,7 +16,7 @@ namespace com.opentrigger.distributord
             // 0 = Quiet
             // 1 = Trigger/Release, print config
             // 2 = Json
-            // 3 = Take, Skip, PublishFails
+            // 3 = Take, Skip, PublishFails, Drops
             // 4 = Duplicates, Decoding problems
             // 5 = Excluded
             // 6 = all
@@ -35,7 +35,12 @@ namespace com.opentrigger.distributord
                 new RoundtripTime(server, padding, verbosity);
             }
 
-            var config = new DefaultConfig().GetDefaultDistributorConfig();
+            DistributorConfig config = null;
+#if DEBUG
+            config = new DefaultConfig().GetDefaultDebugDistributorConfig();
+#else
+            config = new DistributorConfig();
+#endif
 
             var configIndex = Array.IndexOf(args, "-c");
             if (configIndex == -1) configIndex = Array.IndexOf(args, "--config");
@@ -57,6 +62,8 @@ namespace com.opentrigger.distributord
                 }
                 
             }
+
+            if(config == null) throw new Exception("Config missing!");
 
             config.Verbosity += verbosity;
 
@@ -83,6 +90,11 @@ namespace com.opentrigger.distributord
             if (config.FlicDistributorConfigs != null && config.FlicDistributorConfigs.Any())
             {
                 distributors.AddRange(config.FlicDistributorConfigs.Select(flicDistributorConfig => new FlicDistributor(flicDistributorConfig, config.Verbosity)));
+            }
+
+            if (config.CoapServerDistributorConfigs != null && config.CoapServerDistributorConfigs.Any())
+            {
+                distributors.AddRange(config.CoapServerDistributorConfigs.Select(c=>new CoapServerDistributor(c,config.Verbosity)));
             }
 
             if (distributors.Count == 0) throw new InvalidOperationException("No distributors configured");

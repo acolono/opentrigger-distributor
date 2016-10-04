@@ -53,12 +53,13 @@ namespace com.opentrigger.distributord
 
     public class CoapListener
     {
+        public static readonly IEnumerable<int> DefaultPorts = new []{5683};
         public event ButtonDataReceivedEvent OnButtonData;
         public event ExceptionEvent OnException;
         private CoapServer Server { get; set; }
 
         public CoapListener()
-            : this(new []{ 5683 })
+            : this(DefaultPorts)
         { }
 
         public CoapListener(IEnumerable<int> ports)

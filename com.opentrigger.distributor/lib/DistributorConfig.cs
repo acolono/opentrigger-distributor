@@ -72,6 +72,7 @@ namespace com.opentrigger.distributord
         public IEnumerable<QueueDistributorConfig> QueueDistributorConfigs { get; set; }
         public IEnumerable<CoapDistributorConfig> CoapDistributorConfigs { get; set; }
         public IEnumerable<FlicDistributorConfig> FlicDistributorConfigs { get; set; }
+        public IEnumerable<CoapServerDistributorConfig> CoapServerDistributorConfigs { get; set; }
         public int Verbosity { get; set; } = 1;
         public int IdleCycle { get; set; } = 500;
         public bool RunParallel { get; set; } = false;
@@ -92,5 +93,13 @@ namespace com.opentrigger.distributord
     public class CoapDistributorConfig : DistributorConfigBase
     {
         public IEnumerable<ButtonConfiguration> ButtonConfigurations;
+    }
+
+    [JsonObject(MemberSerialization.OptOut)]
+    public class CoapServerDistributorConfig : DistributorConfigBase
+    {
+        public IEnumerable<int> Port { get; set; } = CoapListener.DefaultPorts;
+        public string Origin { get; set; } = null;
+        public int CleanupMaxAge { get; set; } = 3000;
     }
 }
