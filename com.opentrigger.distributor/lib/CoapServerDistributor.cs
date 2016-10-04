@@ -9,10 +9,7 @@ using uPLibrary.Networking.M2Mqtt;
 namespace com.opentrigger.distributord
 {
 
-    public class CoapServerTrigger : PacketBase
-    {
-        public int EventId { get; set; }
-    }
+    public class CoapServerTrigger : PacketBase {}
     public class CoapServerRelease : CoapServerTrigger
     {
         public int Age { get; set; }
