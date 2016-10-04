@@ -71,6 +71,7 @@ namespace com.opentrigger.distributord
                     if (alreadyDown == 0)
                     {
                         _downList.Add(data);
+                        data.EventId = data.Packet.GetEventId();
                         OnTrigger(data);
                     }
                 }
@@ -98,6 +99,7 @@ namespace com.opentrigger.distributord
                 var tailing = _downList.Where(d => !uniqueUids.Contains(d,_uidComparer));
                 foreach (var data in tailing)
                 {
+                    data.Packet.GetEventId();
                     OnRelease(new ReleaseData
                     {
                         UniqueIdentifier = data.UniqueIdentifier,
@@ -105,6 +107,7 @@ namespace com.opentrigger.distributord
                         Timestamp = data.Timestamp,
                         Origin = data.Origin,
                         Age = (int)(DateTimeOffset.UtcNow - data.Timestamp).TotalMilliseconds,
+                        EventId = data.Packet.GetEventId()
                     });
                 }
                 _downList.RemoveAll(d => !uniqueUids.Contains(d,_uidComparer));

@@ -16,6 +16,19 @@ namespace com.opentrigger.distributord
         public byte[] RawData { get; set; }
         public byte[] AdvertisingData { get; set; }
         public BtleAdvertManufacturerSpecific ManufacturerSpecific { get; set; }
+
+        public int? GetEventId()
+        {
+            if (ManufacturerSpecific != null && ManufacturerSpecific.SensorData != null)
+            {
+                if (ManufacturerSpecific.SensorData.ContainsKey("EventId"))
+                {
+                    int eventId;
+                    if (int.TryParse(ManufacturerSpecific.SensorData["EventId"], out eventId)) return eventId;
+                }
+            }
+            return null;
+        }
     }
 
     public class BtleAdvertManufacturerSpecific
