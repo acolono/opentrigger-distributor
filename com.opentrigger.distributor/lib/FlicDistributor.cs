@@ -86,7 +86,7 @@ namespace com.opentrigger.distributord
                 pubMsg = new FlicReleaseData
                 {
                     UniqueIdentifier = json.Mac, Timestamp = DateTimeOffset.UtcNow,
-                    Origin = e.Topic, EventType = eventType,
+                    Origin = e.Topic, EventType = eventType, EventId = json.EventId
                 };
 
                 if (buttonInfo.LastDown.HasValue && eventType == EventType.Release)
@@ -126,6 +126,7 @@ namespace com.opentrigger.distributord
                 Origin = data.Origin,
                 Timestamp = data.Timestamp,
                 UniqueIdentifier = data.UniqueIdentifier,
+                EventId = data.EventId,
             };
             Publish(_config.TriggerTopic, flicData);
         }
