@@ -39,15 +39,15 @@ namespace com.opentrigger.tests
             var request = new Request(Method.POST)
             {
                 URI = uri.Uri,
-                PayloadString = "par1=1&par2=2"
+                PayloadString = "event=1&state=2"
             };
             request.Send();
             var response = request.WaitForResponse(1000);
             listener.Stop();
             
             Assert.IsNotNull(data);
-            Assert.IsTrue(data.GetInt("par1") == 1);
-            Assert.IsTrue(data.GetInt("par2") == 2);
+            Assert.IsTrue(data.GetInt("event") == 1);
+            Assert.IsTrue(data.GetInt("state") == 2);
             Assert.IsFalse(string.IsNullOrWhiteSpace(data.Get("source")));
             Console.WriteLine(data.Get("source"));
             var validResponseStatusCodes = new List<StatusCode>() { StatusCode.Valid, StatusCode.Content, StatusCode.Changed, StatusCode.Continue, StatusCode.Created, StatusCode.Deleted};
