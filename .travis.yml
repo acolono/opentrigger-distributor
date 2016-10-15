@@ -38,7 +38,7 @@ script:
   - make deb
 deploy:
   provider: script
-  script: make publish
+  script: make publish && cd quickinstall && ./publish.sh
   skip_cleanup: true
   on:
     branch: master

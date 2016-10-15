@@ -1,0 +1,9 @@
+Package: opentrigger
+Maintainer: Acolono GmbH <hello@acolono.com>
+Architecture: all
+Version: __VERSION__
+Depends: opentrigger-distributor
+Recommends: nodered, mosquitto 
+Provides:
+Description: opentrigger.com
+ https://github.com/acolono/opentrigger-distributor
