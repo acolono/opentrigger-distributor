@@ -1,4 +1,4 @@
-Package: opentrigger
+Package: opentrigger-dev
 Maintainer: Acolono GmbH <hello@acolono.com>
 Architecture: all
 Version: __VERSION__
