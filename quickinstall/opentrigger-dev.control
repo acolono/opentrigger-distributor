@@ -4,6 +4,5 @@ Architecture: all
 Version: __VERSION__
 Depends: opentrigger, mono-complete, nuget, avr-libc, binutils-avr, gcc-avr, gdb-avr, avrdude, make
 Recommends: git, nunit-console, mosquitto-clients, simulavr
-Provides:
 Description: opentrigger.com
  https://github.com/acolono/opentrigger-distributor

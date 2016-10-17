@@ -4,6 +4,5 @@ Architecture: all
 Version: __VERSION__
 Depends: opentrigger-distributor
 Recommends: nodered, bluez-hcidump, bluez-tools
-Provides:
 Description: opentrigger.com
  https://github.com/acolono/opentrigger-distributor
