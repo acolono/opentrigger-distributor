@@ -2,8 +2,8 @@ Package: opentrigger-distributor
 Maintainer: Acolono GmbH <hello@acolono.com>
 Architecture: __ARCH__
 Version: __VERSION__
-Depends: mono-runtime (>= 4.2.1), libmono-system-xml-linq4.0-cil, libmono-system-data4.0-cil, libmono-system-web4.0-cil, libmono-corlib4.0-cil
-Recommends: supervisor, opentrigger-otraw2q
+Depends: mono-runtime (>= 4.2.1), libmono-system-xml-linq4.0-cil, libmono-system-data4.0-cil, libmono-system-web4.0-cil, libmono-corlib4.0-cil, mosquitto
+Recommends: supervisor, opentrigger-otraw2q, opentrigger-osd-tunslip6
 Provides: opentrigger-distributor
 Description: opentrigger.com
  https://github.com/acolono/opentrigger-distributor

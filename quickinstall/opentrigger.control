@@ -3,7 +3,7 @@ Maintainer: Acolono GmbH <hello@acolono.com>
 Architecture: all
 Version: __VERSION__
 Depends: opentrigger-distributor
-Recommends: nodered, mosquitto 
+Recommends: nodered, bluez-hcidump, bluez-tools
 Provides:
 Description: opentrigger.com
  https://github.com/acolono/opentrigger-distributor

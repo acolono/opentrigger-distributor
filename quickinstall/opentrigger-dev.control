@@ -2,7 +2,7 @@ Package: opentrigger
 Maintainer: Acolono GmbH <hello@acolono.com>
 Architecture: all
 Version: __VERSION__
-Depends: opentrigger, mono-complete, nuget, bluez-hcidump, bluez-tools, avr-libc, binutils-avr, gcc-avr, gdb-avr, avrdude, make
+Depends: opentrigger, mono-complete, nuget, avr-libc, binutils-avr, gcc-avr, gdb-avr, avrdude, make
 Recommends: git, nunit-console, mosquitto-clients, simulavr
 Provides:
 Description: opentrigger.com
