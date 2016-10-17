@@ -1,0 +1,47 @@
+{
+  "QueueDistributorConfigs": [
+    {
+      // "Connection": "tcp://127.0.0.1:1883", /* tcp://host:port of mqtt server */
+      // "QosLevels": [ "AtMostOnce" ], /* AtMostOnce | AtLeastOnce | ExactlyOnce */
+      // "RawHexTopics": [ "/opentrigger/rawhex/#" ], /* topics to subscribe to, expecting bluetooth packages in HexStream Format */
+      // "TriggerTopic": "/opentrigger/signals/trigger", /* trigger messages will be published to this topic */
+      // "ReleaseTopic": "/opentrigger/signals/release", /* release messages will be published to this topic */
+      // "PublishFormat": "Json", /* Json | JsonPretty | HexString */
+      // "ClientId": null, /* null will generate a random Clinetid */
+      // "Distance": 500, /* possible delay between signals */
+      // "Skip": 0,
+      // "UniqueIdentifier": "Nrf51MacAndTokenCubePir" /* Mac | MacAndAdvertisingData | MacAndTokenCubePir | Nrf51MacAndTokenCubePir */
+      // "IncludedMacs": [ "CA:9F:0A:00:66:20" ] /* Mac Address of your Button/s */
+    }
+  ],
+
+  "FlicDistributorConfigs": [
+    {
+      // "RawFlicTopics": ["/opentrigger/rawflic"],
+      // "Connection": "tcp://127.0.0.1:1883",
+      // "QosLevels": ["AtMostOnce"],
+      // "TriggerTopic": "/opentrigger/signals/trigger",
+      // "ReleaseTopic": "/opentrigger/signals/release",
+      // "PublishFormat": "JsonPretty",
+      // "ClientId": null
+    }
+  ],
+
+  "CoapServerDistributorConfigs": [
+    {
+      // "Port": [5683], /* udp listening ports */
+      // "Origin": null, /* custom origin - optional */
+      // "CleanupMaxAge": 3000,
+      // "Connection": "tcp://127.0.0.1:1883",
+      // "QosLevels": ["AtMostOnce"],
+      // "TriggerTopic": "/opentrigger/signals/trigger",
+      // "ReleaseTopic": "/opentrigger/signals/release",
+      // "PublishFormat": "JsonPretty",
+      // "ClientId": null
+    }
+  ],
+
+  "Verbosity": 2, /* 0-5 */
+  "IdleCycle": 500,
+  "RunParallel": false /* run distributors in parallel threads - if you have a lot of distributors */
+}

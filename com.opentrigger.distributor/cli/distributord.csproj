@@ -85,6 +85,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="default-config.json" />
     <None Include="nrf51-config.json" />
     <None Include="packages.config" />
   </ItemGroup>

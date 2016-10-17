@@ -23,8 +23,7 @@ install:
 	mkdir -p $(INSTALL_ROOT)usr/share/man/man8/
 	
 	install -v com.opentrigger.distributor/cli/bin/$(CONFIGURATION)/distributord $(INSTALL_ROOT)usr/bin/
-	#TODO: maybe a more generic default config?
-	install -v -m 0664 com.opentrigger.distributor/cli/nrf51-config.json $(INSTALL_ROOT)etc/opentrigger/distributor/distributord.json
+	install -v -m 0664 com.opentrigger.distributor/cli/default-config.json $(INSTALL_ROOT)etc/opentrigger/distributor/distributord.json
 	install -v supervisor/hci.sh $(INSTALL_ROOT)usr/bin/othciinit
 	install -v -m 0664 supervisor/distributor.conf $(INSTALL_ROOT)etc/supervisor/conf.d/distributord.conf
 	install -v -m 0664 distributord.8 $(INSTALL_ROOT)usr/share/man/man8/distributord.8

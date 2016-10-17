@@ -3,6 +3,6 @@ Maintainer: Acolono GmbH <hello@acolono.com>
 Architecture: all
 Version: __VERSION__
 Depends: opentrigger, mono-complete, nuget, avr-libc, binutils-avr, gcc-avr, gdb-avr, avrdude, make
-Recommends: git, nunit-console, mosquitto-clients, simulavr
+Recommends: git, nunit-console, simulavr
 Description: opentrigger.com
  https://github.com/acolono/opentrigger-distributor

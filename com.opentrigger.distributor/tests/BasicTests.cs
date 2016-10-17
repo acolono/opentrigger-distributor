@@ -29,7 +29,9 @@ namespace com.opentrigger.tests
             var config = new DistributorConfig();
             config.QueueDistributorConfigs = new List<QueueDistributorConfig> {new QueueDistributorConfig()};
             config.CoapDistributorConfigs = new List<CoapDistributorConfig> {new CoapDistributorConfig()};
-            var json = config.Serialize(false).Deserialize<DistributorConfig>().Serialize();
+            config.FlicDistributorConfigs = new List<FlicDistributorConfig> {new FlicDistributorConfig()};
+            config.CoapServerDistributorConfigs = new List<CoapServerDistributorConfig> {new CoapServerDistributorConfig()};
+            var json = config.Serialize().Deserialize<DistributorConfig>().Serialize();
             var obj = json.Deserialize<DistributorConfig>();
             Debug.WriteLine(json);
             Assert.IsTrue(obj.QueueDistributorConfigs.Any());

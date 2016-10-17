@@ -26,8 +26,8 @@ namespace com.opentrigger.distributord
     public class QueueDistributorConfig : DistributorConfigBase
     {
         public IEnumerable<string> RawHexTopics { get; set; } = new []{"/opentrigger/rawhex/#"};
-        public int Distance { get; set; } = 2000;
-        public int Skip { get; set; } = 1;
+        public int Distance { get; set; } = 500;
+        public int Skip { get; set; } = 0;
         public UniqueIdentifier UniqueIdentifier { get; set; } = UniqueIdentifier.Mac;
         public IEnumerable<string> ExcludedMacs { get; set; } = null;
         public IEnumerable<string> IncludedMacs { get; set; } = null;
