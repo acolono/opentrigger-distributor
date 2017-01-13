@@ -3,6 +3,6 @@ Maintainer: Acolono GmbH <hello@acolono.com>
 Architecture: all
 Version: __VERSION__
 Depends: opentrigger-distributor
-Recommends: nodered, bluez-hcidump, bluez-tools, html2text
+Recommends: nodered, npm, bluez-hcidump, bluez-tools, html2text
 Description: opentrigger.com
  https://github.com/acolono/opentrigger-distributor

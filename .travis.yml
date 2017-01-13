@@ -19,6 +19,7 @@ mono:
  # beta
  # weekly
  - latest
+ - 4.6.2
  # 4.4.2 stable release when development started
  - 4.4.2 
  # 4.4.1
@@ -42,4 +43,4 @@ deploy:
   skip_cleanup: true
   on:
     branch: master
-    condition: '( $CONFIGURATION = Release ) && ( `mono --version | grep -q "compiler version 4.2.1" && echo 1`)'
+    condition: '( $CONFIGURATION = Release ) && ( `mono --version | grep -q "compiler version 4.6.2" && echo 1`)'
