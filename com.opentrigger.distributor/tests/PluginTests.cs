@@ -26,7 +26,7 @@ namespace com.opentrigger.tests
         {
             public void Start(string[] cmdlineArgs)
             {
-                throw new Exception("die");
+                if(cmdlineArgs.Contains("--failing")) throw new Exception("die");
             }
         }
 
@@ -37,7 +37,7 @@ namespace com.opentrigger.tests
             var cnt = 0;
             try
             {
-                Plugins.StartPlugins(new string[] { });
+                Plugins.StartPlugins(new [] {"--failing"});
             }
             catch (Exception e)
             {
