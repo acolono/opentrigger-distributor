@@ -13,6 +13,8 @@ namespace com.opentrigger.distributord
         private static bool keepRunning = true;
         static void Main(string[] args)
         {
+            Plugins.Plugins.StartPlugins(args);
+
             // 0 = Quiet
             // 1 = Trigger/Release, print config
             // 2 = Json

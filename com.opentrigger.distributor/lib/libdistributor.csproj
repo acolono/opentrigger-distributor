@@ -63,6 +63,7 @@
     <Compile Include="IDistributor.cs" />
     <Compile Include="MqttClientFactory.cs" />
     <Compile Include="PacketData.cs" />
+    <Compile Include="Plugins\LedBlinkPlugin.cs" />
     <Compile Include="Plugins\PluginBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueDistributor.cs" />
