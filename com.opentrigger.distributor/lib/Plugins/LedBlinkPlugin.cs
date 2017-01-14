@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using CoAP;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using CoAP.Log;
 
 namespace com.opentrigger.distributord.Plugins
 {
@@ -19,6 +15,8 @@ namespace com.opentrigger.distributord.Plugins
             var argIndex = Array.IndexOf(cmdlineArgs, "--ledblink");
             if(argIndex == -1) return;
 
+            LogManager.Level = LogLevel.None;
+            
             var jsonResponse = new JsonResponse();
 
             try
@@ -51,5 +49,6 @@ namespace com.opentrigger.distributord.Plugins
             public string Error { get; set; }
             public string UniqueIdentifier { get; set; }
         }
+
     }
 }
