@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using com.opentrigger.distributord.Plugins;
@@ -14,12 +15,20 @@ namespace com.opentrigger.tests
         [Test]
         public void BuiltinDummy()
         {
+            var sw = new Stopwatch();
             var dummy = typeof(DummyPlugin);
+            sw.Start();
             Plugins.StartPlugins(new []{"--dummy"});
+            sw.Stop();
+            var pluginCount = Plugins.ActivatedPlugins.Count;
+            Console.WriteLine($"cnt={pluginCount} msec={sw.ElapsedMilliseconds}");
             Console.WriteLine(string.Join(", ", Plugins.ActivatedPlugins.Keys.Select(k => k.FullName)));
 
             var activeDummy = Plugins.ActivatedPlugins[dummy] as DummyPlugin;
             Assert.IsNotNull(activeDummy);
+
+            var activeEmpty = Plugins.ActivatedPlugins[typeof(EmptyPlugin)];
+            Assert.IsNotNull(activeEmpty);
         }
 
         private class FailingPlugin : IPlugin
@@ -27,6 +36,13 @@ namespace com.opentrigger.tests
             public void Start(string[] cmdlineArgs)
             {
                 if(cmdlineArgs.Contains("--failing")) throw new Exception("die");
+            }
+        }
+
+        private class EmptyPlugin : IPlugin
+        {
+            public void Start(string[] cmdlineArgs)
+            {
             }
         }
 
