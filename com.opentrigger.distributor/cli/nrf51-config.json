@@ -14,9 +14,9 @@
       "Skip": 0,
       "UniqueIdentifier": "Nrf51MacAndTokenCubePir" /* Mac | MacAndAdvertisingData | MacAndTokenCubePir | Nrf51MacAndTokenCubePir */
       // "IncludedMacs": [ "CA:9F:0A:00:66:20" ] /* Mac Address of your Button/s */
-    },
+    }
 
   ],
   "Verbosity": 0, /* 0-5 */
-  "IdleCycle": 500,
+  "IdleCycle": 500
 }

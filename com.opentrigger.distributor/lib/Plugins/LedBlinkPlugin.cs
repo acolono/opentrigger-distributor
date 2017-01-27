@@ -11,9 +11,20 @@ namespace com.opentrigger.distributord.Plugins
     {
         public void Start(string[] cmdlineArgs)
         {
-            if(cmdlineArgs.Length != 2) return;
-            var argIndex = Array.IndexOf(cmdlineArgs, "--ledblink");
-            if(argIndex == -1) return;
+            var ledblinkIndex = Array.IndexOf(cmdlineArgs, "--ledblink");
+            if(ledblinkIndex == -1) return;
+
+            var payloadIndex = Array.IndexOf(cmdlineArgs, "--payload");
+
+            string payload;
+            try
+            {
+                payload = payloadIndex != -1 ? cmdlineArgs[payloadIndex + 1] : "r=0&g=100&b=0&delay=20&times=5";
+            }
+            catch (Exception e)
+            {
+                throw new Exception("cant read payload from commandline parameters", e);
+            }
 
             LogManager.Level = LogLevel.None;
             
@@ -21,17 +32,14 @@ namespace com.opentrigger.distributord.Plugins
 
             try
             {
-                jsonResponse.UniqueIdentifier = cmdlineArgs[argIndex + 1];
+                jsonResponse.UniqueIdentifier = cmdlineArgs[ledblinkIndex + 1];
                 var uri = new Uri($"coap://{jsonResponse.UniqueIdentifier}/led/RGB");
                 var timeout = 5000;
 
-                var greenRequest = new Request(Method.PUT) { URI = uri, PayloadString = "r=0&g=255&b=0" };
-                var offRequest = new Request(Method.PUT) { URI = uri, PayloadString = "r=0&g=0&b=0" };
-                greenRequest.Send();
-                var greenresponse = greenRequest.WaitForResponse(timeout);
-                if (greenresponse == null) throw new TimeoutException("green - no response");
-                var offresponse = offRequest.Send().WaitForResponse(timeout);
-                if (offresponse == null) throw new TimeoutException("off - no response");
+                var request = new Request(Method.PUT) { URI = uri, PayloadString = payload };
+                request.Send();
+                var response = request.WaitForResponse(timeout);
+                if (response == null) throw new TimeoutException("green - no response");
                 jsonResponse.Success = true;
             }
             catch (Exception e)
