@@ -15,6 +15,7 @@ namespace com.opentrigger.distributord.Plugins
             if(ledblinkIndex == -1) return;
 
             var payloadIndex = Array.IndexOf(cmdlineArgs, "--payload");
+            var debug = Array.IndexOf(cmdlineArgs, "--debug") != -1;
 
             string payload;
             try
@@ -26,7 +27,15 @@ namespace com.opentrigger.distributord.Plugins
                 throw new Exception("cant read payload from commandline parameters", e);
             }
 
-            LogManager.Level = LogLevel.None;
+            if (debug)
+            {
+                LogManager.Level = LogLevel.All;
+                LogManager.Instance = new ConsoleLogManager();
+            }
+            else
+            {
+                LogManager.Level = LogLevel.None;
+            }
             
             var jsonResponse = new JsonResponse();
 
