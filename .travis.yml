@@ -19,7 +19,6 @@ mono:
  # beta
  # weekly
  - latest
- - 5.0.0
  - 4.8.1
  - 4.6.2
  # 4.4.2 stable release when development started
@@ -34,6 +33,7 @@ matrix:
   - mono: weekly
   - mono: alpha
   - mono: beta
+  - mono: latest
 install:
   - make packages
 script:
