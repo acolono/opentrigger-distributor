@@ -35,8 +35,9 @@ namespace com.opentrigger.distributord
             if (cleanupFirst) hexString = Regex.Replace(hexString, "[^0-F]", string.Empty, RegexOptions.IgnoreCase);
             if (hexString.Length % 2 == 1) throw new Exception("odd number of digits");
 
-            byte[] bytes = new byte[hexString.Length >> 1];
-            for (int i = 0; i < hexString.Length >> 1; ++i) bytes[i] = (byte)((_nibbles(hexString[i << 1]) << 4) + (_nibbles(hexString[(i << 1) + 1])));
+            var bytes = new byte[hexString.Length >> 1];
+            for (var i = 0; (i) < hexString.Length >> 1; ++i)
+                bytes[i] = (byte) ((_nibbles(hexString[i << 1]) << 4) + _nibbles(hexString[(i << 1) + 1]));
             return bytes;
         }
 
